@@ -15,13 +15,13 @@
  */
 
 /* 
- * File:   inflate_source_test.cpp
+ * File:   lzma_sink_test.test
  * Author: alex
  *
- * Created on February 4, 2016, 3:17 PM
+ * Created on February 6, 2016, 3:17 PM
  */
 
-#include "staticlib/compress/inflate_source.hpp"
+#include "staticlib/compress/lzma_sink.hpp"
 
 #include <array>
 #include <iostream>
@@ -34,26 +34,34 @@ namespace su = staticlib::utils;
 namespace si = staticlib::io;
 namespace sc = staticlib::compress;
 
-void test_inflate() {
-    su::FileDescriptor fd{"../test/data/hello.txt.deflate", 'r'};
-    auto inflater = sc::make_inflate_source(fd);
-    si::string_sink ss{};
+void test_lzma() {
     std::array<char, 4096> buf;
-    si::copy_all(inflater, ss, buf.data(), buf.size());
-    slassert("hello" == ss.get_string());
+
+    su::FileDescriptor fd_comp{"../test/data/hello.txt.xz", 'r'};
+    si::string_sink ss_comp{};
+    si::copy_all(fd_comp, ss_comp, buf.data(), buf.size());
+
+    su::FileDescriptor fd{"../test/data/hello.txt", 'r'};
+    si::string_sink ss{};
+    {
+        auto coder = sc::make_lzma_sink(ss);
+        si::copy_all(fd, coder, buf.data(), buf.size());
+    }
+
+    slassert(ss_comp.get_string() == ss.get_string());
 }
 
 void test_huge() {
     std::array<char, 4096> buf;
 
-    auto inflater = sc::make_inflate_source(su::FileDescriptor{"winxp_printer.vdi.deflate", 'r'});
-    su::FileDescriptor fd_out{"winxp_printer.vdi", 'w'};
-    si::copy_all(inflater, fd_out, buf.data(), buf.size());
+    su::FileDescriptor fd_in{"/home/alex/ebook/maugham/bondage.txt", 'r'};
+    auto coder = sc::make_lzma_sink(su::FileDescriptor{"bondage.txt.xz", 'w'});
+    si::copy_all(fd_in, coder, buf.data(), buf.size());
 }
 
 int main() {
     try {
-        test_inflate();
+        test_lzma();
 //        test_huge();
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
@@ -61,3 +69,4 @@ int main() {
     }
     return 0;
 }
+
