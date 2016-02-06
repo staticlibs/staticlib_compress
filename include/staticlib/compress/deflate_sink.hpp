@@ -42,14 +42,30 @@ namespace detail {
 
 template <typename Sink>
 class DeflateDeleter {
-    Sink& sink;
+    Sink* sink;
     char* buf;
     size_t buf_size;
 public:
     DeflateDeleter(Sink& sink, char* buf, size_t buf_size) :
-    sink(sink),
+    sink(std::addressof(sink)),
     buf(buf),
     buf_size(buf_size) { }
+
+    DeflateDeleter(const DeflateDeleter&) = delete;
+
+    DeflateDeleter& operator=(const DeflateDeleter&) = delete;
+
+    DeflateDeleter(DeflateDeleter&& other) :
+    sink(other.sink),
+    buf(other.buf),
+    buf_size(other.buf_size) { }
+
+    DeflateDeleter& operator=(DeflateDeleter&& other) {
+        sink = other.sink;
+        buf = other.buf;
+        buf_size = other.buf_size;
+        return *this;
+    }
     
     void operator()(z_stream* strm) {
         // finish encoding
@@ -62,12 +78,12 @@ public:
             auto err = ::deflate(strm, Z_FINISH);
             switch (err) {
             case Z_OK:
-                staticlib::io::write_all(sink, buf, buf_size - strm->avail_out);
+                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);
                 strm->next_out = reinterpret_cast<unsigned char*> (buf);
                 strm->avail_out = static_cast<uInt> (buf_size);
                 break;
             case Z_STREAM_END:
-                staticlib::io::write_all(sink, buf, buf_size - strm->avail_out);                
+                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);                
                 // fall through
             default:
                 // cannot report any error safely - we are in destructor

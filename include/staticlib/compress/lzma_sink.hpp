@@ -43,15 +43,31 @@ namespace detail {
 
 template <typename Sink>
 class LzmaDeleter {
-    Sink& sink;
+    Sink* sink;
     char* buf;
     size_t buf_size;
 public:
 
     LzmaDeleter(Sink& sink, char* buf, size_t buf_size) :
-    sink(sink),
+    sink(std::addressof(sink)),
     buf(buf),
     buf_size(buf_size) { }
+
+    LzmaDeleter(const LzmaDeleter&) = delete;
+
+    LzmaDeleter& operator=(const LzmaDeleter&) = delete;
+
+    LzmaDeleter(LzmaDeleter&& other) :
+    sink(other.sink),
+    buf(other.buf),
+    buf_size(other.buf_size) { }
+
+    LzmaDeleter& operator=(LzmaDeleter&& other) {
+        sink = other.sink;
+        buf = other.buf;
+        buf_size = other.buf_size;
+        return *this;
+    }
 
     void operator()(lzma_stream* strm) {
         // finish encoding
@@ -64,12 +80,12 @@ public:
             auto err = ::lzma_code(strm, LZMA_FINISH);
             switch (err) {
             case LZMA_OK:
-                staticlib::io::write_all(sink, buf, buf_size - strm->avail_out);
+                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);
                 strm->next_out = reinterpret_cast<uint8_t*>(buf);
                 strm->avail_out = buf_size;
                 break;
             case LZMA_STREAM_END:
-                staticlib::io::write_all(sink, buf, buf_size - strm->avail_out);
+                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);
                 // fall through
             default:
                 // cannot report any error safely - we are in destructor
