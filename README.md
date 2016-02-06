@@ -8,6 +8,7 @@ that performs compression/decompress using [Zlib](http://www.zlib.net/) and [Xz]
 compression algorithms.
 
 This library is header-only and depends on [staticlib_io](https://github.com/staticlibs/staticlib_io.git),
+[staticlib_config](https://github.com/staticlibs/staticlib_config.git),
 Zlib and Xz Utils (liblzma).
 
 Link to the [API documentation](http://staticlibs.github.io/staticlib_compress/docs/html/namespacestaticlib_1_1compress.html).

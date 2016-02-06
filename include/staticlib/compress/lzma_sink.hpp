@@ -53,9 +53,17 @@ public:
     buf(buf),
     buf_size(buf_size) { }
 
-    LzmaDeleter(const LzmaDeleter&) = delete;
+    LzmaDeleter(const LzmaDeleter& other) :
+    sink(other.sink),
+    buf(other.buf),
+    buf_size(other.buf_size) { }
 
-    LzmaDeleter& operator=(const LzmaDeleter&) = delete;
+    LzmaDeleter& operator=(const LzmaDeleter& other) {
+        sink = other.sink;
+        buf = other.buf;
+        buf_size = other.buf_size;
+        return *this;
+    }
 
     LzmaDeleter(LzmaDeleter&& other) :
     sink(other.sink),

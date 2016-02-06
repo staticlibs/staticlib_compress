@@ -51,9 +51,17 @@ public:
     buf(buf),
     buf_size(buf_size) { }
 
-    DeflateDeleter(const DeflateDeleter&) = delete;
+    DeflateDeleter(const DeflateDeleter& other) :
+    sink(other.sink),
+    buf(other.buf),
+    buf_size(other.buf_size) { }
 
-    DeflateDeleter& operator=(const DeflateDeleter&) = delete;
+    DeflateDeleter& operator=(const DeflateDeleter& other) {
+        sink = other.sink;
+        buf = other.buf;
+        buf_size = other.buf_size;
+        return *this;
+    }
 
     DeflateDeleter(DeflateDeleter&& other) :
     sink(other.sink),
