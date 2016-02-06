@@ -98,7 +98,7 @@ class lzma_sink {
      */
     std::array<char, buf_size> buf;
     /**
-     * Zlib compressing stream
+     * LZMA compressing stream
      */
     std::unique_ptr<lzma_stream, detail::LzmaDeleter<Sink>> strm;
 
@@ -210,7 +210,7 @@ private:
  * created object will own the specified sink
  * 
  * @param sink output sink
- * @return deflate sink
+ * @return lzma sink
  */
 template <typename Sink,
         class = typename std::enable_if<!std::is_lvalue_reference<Sink>::value>::type>
@@ -223,7 +223,7 @@ lzma_sink<Sink> make_lzma_sink(Sink&& sink) {
  * created object will NOT own the specified sink
  * 
  * @param sink output sink
- * @return deflate sink
+ * @return lzma sink
  */
 template <typename Sink>
 lzma_sink<staticlib::io::reference_sink<Sink>> make_lzma_sink(Sink& sink) {
