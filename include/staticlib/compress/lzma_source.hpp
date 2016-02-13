@@ -200,7 +200,7 @@ private:
 };
 
 /**
- * Factory function for creating inflate sources,
+ * Factory function for creating lzma sources,
  * created object will own the specified source
  * 
  * @param source input source
@@ -213,7 +213,7 @@ lzma_source<Source> make_lzma_source(Source&& source) {
 }
 
 /**
- * Factory function for creating inflate sources,
+ * Factory function for creating lzma sources,
  * created object will NOT own the specified source
  * 
  * @param source input source

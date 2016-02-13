@@ -29,6 +29,7 @@
 #include "staticlib/compress/inflate_source.hpp"
 #include "staticlib/compress/lzma_sink.hpp"
 #include "staticlib/compress/lzma_source.hpp"
+#include "staticlib/compress/zip_sink.hpp"
 
 #endif	/* STATICLIB_COMPRESS_HPP */
 

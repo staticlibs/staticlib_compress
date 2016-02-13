@@ -230,7 +230,7 @@ private:
 };
 
 /**
- * Factory function for creating deflate sinks,
+ * Factory function for creating lzma sinks,
  * created object will own the specified sink
  * 
  * @param sink output sink
@@ -243,7 +243,7 @@ lzma_sink<Sink> make_lzma_sink(Sink&& sink) {
 }
 
 /**
- * Factory function for creating deflate sinks,
+ * Factory function for creating lzma sinks,
  * created object will NOT own the specified sink
  * 
  * @param sink output sink

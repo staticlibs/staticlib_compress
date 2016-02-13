@@ -36,6 +36,8 @@ if ( NOT DEFINED STATICLIB_TOOLCHAIN )
         staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_zlib )
         staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_xz )
     endif ( )
+    staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../staticlib_io )
+    staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../staticlib_endian )
 endif ( )
 
 # target

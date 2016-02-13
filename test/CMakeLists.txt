@@ -24,6 +24,7 @@ set ( CMAKE_TOOLCHAIN_FILE ${STATICLIB_CMAKE}/toolchains/${STATICLIB_TOOLCHAIN}.
 # project
 project ( staticlib_compress_test CXX )
 include ( ${STATICLIB_CMAKE}/staticlibs_common.cmake )
+staticlib_enable_deplibs_cache ( )
 
 # dependencies
 if ( NOT DEFINED STATICLIB_DEPS )
@@ -31,6 +32,7 @@ if ( NOT DEFINED STATICLIB_DEPS )
 endif ( )
 staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_config )
 staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_io )
+staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_endian )
 staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_utils )
 if ( NOT STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
     staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_zlib )
@@ -41,6 +43,7 @@ set ( ${PROJECT_NAME}_DEPS
         staticlib_compress
         staticlib_config
         staticlib_io
+        staticlib_endian
         staticlib_utils
         zlib
         liblzma )
