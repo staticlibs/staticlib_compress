@@ -26,6 +26,7 @@
 
 #include <ios>
 #include <string>
+#include <vector>
 
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
@@ -168,7 +169,7 @@ void write_eocd(Sink& sink, uint16_t files_count, uint32_t cd_offset,  uint32_t 
 
 /**
  * Sink wrapper that creates ZIP archives,
- * compression of entries is NOT supported
+ * CRC sum and compression of entries is NOT supported
  */
 template <typename Sink>
 class zip_sink {
@@ -270,11 +271,12 @@ public:
         if (cd_written) throw new CompressException(TRACEMSG(std::string() + 
                 "Invalid entry add attempt for finalized ZIP stream"));
         if (headers.size() > 0) {
-            headers.back().write_data_descriptor(sink, sink.get_count() - entry_start);
+            size_t len = sink.get_count() - static_cast<size_t>(entry_start);
+            headers.back().write_data_descriptor(sink, static_cast<uint32_t>(len));
         }
         // currently no support for compression
         headers.emplace_back(std::move(filename), 0);
-        headers.back().write_local_file_header(sink, sink.get_count());
+        headers.back().write_local_file_header(sink, static_cast<uint32_t>(sink.get_count()));
         entry_start = sink.get_count();
     }
     
@@ -285,12 +287,14 @@ public:
      */
     void finalize() {
         if (!cd_written && headers.size() > 0) {
-            headers.back().write_data_descriptor(sink, sink.get_count() - entry_start);
-            uint32_t cd_offset = sink.get_count();
+            size_t len = sink.get_count() - static_cast<size_t>(entry_start);
+            headers.back().write_data_descriptor(sink, static_cast<uint32_t>(len));
+            uint32_t cd_offset = static_cast<uint32_t>(sink.get_count());
             for (detail::Header& he : headers) {
                 he.write_cd_file_header(sink);
             }
-            detail::write_eocd(sink, headers.size(), cd_offset, sink.get_count() - cd_offset);
+            size_t cd_len = sink.get_count() - cd_offset;
+            detail::write_eocd(sink, static_cast<uint16_t>(headers.size()), cd_offset, static_cast<uint32_t>(cd_len));
             cd_written = true;
         }
     }
