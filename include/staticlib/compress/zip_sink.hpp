@@ -31,7 +31,7 @@
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
 #include "staticlib/endian.hpp"
-#include "staticlib/compress/CompressException.hpp"
+#include "staticlib/compress/compress_exception.hpp"
 
 namespace staticlib {
 namespace compress {
@@ -81,7 +81,7 @@ public:
         // Extra field length (m)
         en::write_16_le(sink, 0);
         // File name
-        io::write_all(sink, filename.data(), filename.length());
+        io::write_all(sink, {filename.data(), filename.length()});
         // save offset for CD
         this->offset = offset;
     }
@@ -139,7 +139,7 @@ public:
         // Relative offset of local file header.
         en::write_32_le(sink, offset);
         // File name
-        io::write_all(sink, filename.data(), filename.length());
+        io::write_all(sink, {filename.data(), filename.length()});
     }
     
 };
@@ -176,7 +176,7 @@ class zip_sink {
     /**
      * Destination sink for the zipped data
      */
-    staticlib::io::counting_sink<Sink> sink;
+    sl::io::counting_sink<Sink> sink;
     std::vector<detail::Header> headers;
     std::streamsize entry_start = 0;
     bool cd_written = false;
@@ -189,7 +189,7 @@ public:
      * @param sink destination to write compressed data into
      */
     zip_sink(Sink&& sink) :
-    sink(staticlib::io::make_counting_sink(std::move(sink))) { }
+    sink(sl::io::make_counting_sink(std::move(sink))) { }
 
     /**
      * Destructor, will call `finalize()` if it have not been called yet
@@ -245,12 +245,11 @@ public:
     /**
      * Write implementation
      * 
-     * @param b source buffer
-     * @param length number of bytes to process
+     * @param span source span
      * @return number of bytes processed (read from source buf)
      */
-    std::streamsize write(const char* buffer, std::streamsize len) {
-        return sink.write(buffer, len);
+    std::streamsize write(sl::io::span<const char> span) {
+        return sink.write(span);
     }
 
     /**
@@ -268,7 +267,7 @@ public:
      * @param filename ZIP entry name
      */
     void add_entry(std::string filename) {
-        if (cd_written) throw new CompressException(TRACEMSG(std::string() + 
+        if (cd_written) throw new compress_exception(TRACEMSG( 
                 "Invalid entry add attempt for finalized ZIP stream"));
         if (headers.size() > 0) {
             size_t len = sink.get_count() - static_cast<size_t>(entry_start);
@@ -321,9 +320,9 @@ zip_sink<Sink> make_zip_sink(Sink&& sink) {
  * @return zip sink
  */
 template <typename Sink>
-zip_sink<staticlib::io::reference_sink<Sink>> make_zip_sink(Sink& sink) {
-    return zip_sink<staticlib::io::reference_sink<Sink>> (
-            staticlib::io::make_reference_sink(sink));
+zip_sink<sl::io::reference_sink<Sink>> make_zip_sink(Sink& sink) {
+    return zip_sink<sl::io::reference_sink<Sink>> (
+            sl::io::make_reference_sink(sink));
 }
 
 } // namespace

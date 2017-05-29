@@ -27,19 +27,15 @@
 #include <iostream>
 
 #include "staticlib/config/assert.hpp"
-#include "staticlib/utils/FileDescriptor.hpp"
 #include "staticlib/io.hpp"
-
-namespace su = staticlib::utils;
-namespace si = staticlib::io;
-namespace sc = staticlib::compress;
+#include "staticlib/tinydir.hpp"
 
 void test_store() {
-    auto sink = sc::make_zip_sink(su::FileDescriptor{"test.zip", 'w'});
+    auto sink = sl::compress::make_zip_sink(sl::tinydir::file_sink("test.zip"));
     sink.add_entry("foo.txt");
-    sink.write("hello", 5);
+    sink.write({"hello", 5});
     sink.add_entry("bar/baz.txt");
-    sink.write("bye", 3);
+    sink.write({"bye", 3});
 }
 
 int main() {

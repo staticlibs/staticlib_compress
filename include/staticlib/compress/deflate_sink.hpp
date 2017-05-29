@@ -33,7 +33,7 @@
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
 
-#include "staticlib/compress/CompressException.hpp"
+#include "staticlib/compress/compress_exception.hpp"
 
 namespace staticlib {
 namespace compress {
@@ -86,12 +86,12 @@ public:
             auto err = ::deflate(strm, Z_FINISH);
             switch (err) {
             case Z_OK:
-                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);
+                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});
                 strm->next_out = reinterpret_cast<unsigned char*> (buf);
                 strm->avail_out = static_cast<uInt> (buf_size);
                 break;
             case Z_STREAM_END:
-                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);                
+                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});                
                 // fall through
             default:
                 // cannot report any error safely - we are in destructor
@@ -176,14 +176,13 @@ public:
     /**
      * Write implementation
      * 
-     * @param b source buffer
-     * @param length number of bytes to process
-     * @return number of bytes processed (read from source buf)
+     * @param span source span
+     * @return number of bytes processed (read from source span)
      */
-    std::streamsize write(const char* buffer, std::streamsize len_in) {
+    std::streamsize write(sl::io::span<const char> span) {
         // prepare zlib stream
-        strm->next_in = reinterpret_cast<const unsigned char*> (buffer);
-        strm->avail_in = static_cast<uInt> (len_in);
+        strm->next_in = reinterpret_cast<const unsigned char*> (span.data());
+        strm->avail_in = static_cast<uInt> (span.size());
         strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
         strm->avail_out = static_cast<uInt> (buf.size());
         // call deflate
@@ -191,15 +190,15 @@ public:
             auto err = ::deflate(strm.get(), Z_NO_FLUSH);
             switch (err) {
             case Z_OK:
-                staticlib::io::write_all(sink, buf.data(), buf.size() - strm->avail_out);
+                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
                 strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
                 strm->avail_out = static_cast<uInt> (buf.size());
                 break;
-            default: throw CompressException(TRACEMSG(std::string() +
+            default: throw compress_exception(TRACEMSG(
                         "Deflate error: [" + ::zError(err) + "]"));
             }
         }
-        return len_in;
+        return span.size_signed();
     }
 
     /**
@@ -220,7 +219,7 @@ private:
             new z_stream, detail::DeflateDeleter<Sink>(sink, buf.data(), buf.size())};
         std::memset(strm.get(), 0, sizeof (z_stream));
         auto err = deflateInit(strm.get(), compression_level);
-        if (Z_OK != err) throw CompressException(TRACEMSG(std::string() +
+        if (Z_OK != err) throw compress_exception(TRACEMSG(
                 "Error initializing deflate stream: [" + ::zError(err) + "]"));
         return strm;
     }
@@ -248,9 +247,9 @@ deflate_sink<Sink> make_deflate_sink(Sink&& sink) {
  * @return deflate sink
  */
 template <typename Sink>
-deflate_sink<staticlib::io::reference_sink<Sink>> make_deflate_sink(Sink& sink) {
-    return deflate_sink<staticlib::io::reference_sink<Sink>> (
-            staticlib::io::make_reference_sink(sink));
+deflate_sink<sl::io::reference_sink<Sink>> make_deflate_sink(Sink& sink) {
+    return deflate_sink<sl::io::reference_sink<Sink>> (
+            sl::io::make_reference_sink(sink));
 }
 
 } // namespace

@@ -15,7 +15,7 @@
  */
 
 /* 
- * File:   CompressException.hpp
+ * File:   compress_exception.hpp
  * Author: alex
  *
  * Created on January 29, 2016, 10:19 PM
@@ -24,7 +24,7 @@
 #ifndef STATICLIB_COMPRESS_COMPRESSEXCEPTION_HPP
 #define	STATICLIB_COMPRESS_COMPRESSEXCEPTION_HPP
 
-#include "staticlib/config/BaseException.hpp"
+#include "staticlib/support/exception.hpp"
 
 namespace staticlib {
 namespace compress {
@@ -32,20 +32,20 @@ namespace compress {
 /**
  * Exception that is thrown on compression/decompression error
  */
-class CompressException : public staticlib::config::BaseException {
+class compress_exception : public sl::support::exception {
 public:
     /**
      * Default constructor
      */
-    CompressException() = default;
+    compress_exception() = default;
 
     /**
      * Constructor with message
      * 
      * @param msg error message
      */
-    CompressException(const std::string& msg) :
-    staticlib::config::BaseException(msg) { }
+    compress_exception(const std::string& msg) :
+    sl::support::exception(msg) { }
 
 };
 

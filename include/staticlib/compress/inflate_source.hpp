@@ -34,7 +34,7 @@
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
 
-#include "staticlib/compress/CompressException.hpp"
+#include "staticlib/compress/compress_exception.hpp"
 
 
 namespace staticlib {
@@ -139,27 +139,26 @@ public:
     /**
      * Read implementation
      * 
-     * @param buffer output buffer
-     * @param len_out number of bytes to process
-     * @return number of bytes written into specified buf
+     * @param span output span
+     * @return number of bytes written into specified span
      */
-    std::streamsize read(char* buffer, std::streamsize len_out) {
+    std::streamsize read(sl::io::span<char> span) {
         if (!exhausted) {
             // fill buffer if empty
             if (0 == avail) {
-                avail = staticlib::io::read_all(src, buf.data(), buf.size());
+                avail = sl::io::read_all(src, {buf.data(), buf.size()});
                 pos = 0;
             }
             // prepare zlib stream
             strm->next_in = reinterpret_cast<unsigned char*> (buf.data() + pos);
             strm->avail_in = static_cast<uInt> (avail);
-            strm->next_out = reinterpret_cast<unsigned char*> (buffer);
-            strm->avail_out = static_cast<uInt> (len_out);
+            strm->next_out = reinterpret_cast<unsigned char*> (span.data());
+            strm->avail_out = static_cast<uInt> (span.size());
             // call inflate
             auto err = ::inflate(strm.get(), Z_FINISH);
             if (Z_OK == err || Z_STREAM_END == err || Z_BUF_ERROR == err) {
                 std::streamsize read = avail - strm->avail_in;
-                std::streamsize written = len_out - strm->avail_out;
+                std::streamsize written = span.size_signed() - strm->avail_out;
                 size_t uread = static_cast<size_t> (read);
                 pos += uread;
                 avail -= uread;
@@ -168,7 +167,7 @@ public:
                 }
                 exhausted = true;
                 return std::char_traits<char>::eof();
-            } else throw CompressException(TRACEMSG(std::string()
+            } else throw compress_exception(TRACEMSG(
                     + "Inflate error: [" + ::zError(err) + "]"));
         } else {
             return std::char_traits<char>::eof();
@@ -190,7 +189,7 @@ private:
         std::unique_ptr<z_stream, detail::InflateDeleter> strm{new z_stream, detail::InflateDeleter()};
         std::memset(strm.get(), 0, sizeof (z_stream));
         auto err = inflateInit2(strm.get(), 0);
-        if (Z_OK != err) throw CompressException(TRACEMSG(std::string() +
+        if (Z_OK != err) throw compress_exception(TRACEMSG(
                 "Error initializing inflate stream: [" + ::zError(err) + "]"));
         return strm;
     }   
@@ -218,9 +217,9 @@ inflate_source<Source> make_inflate_source(Source&& source) {
  * @return inflate source
  */
 template <typename Source>
-inflate_source<staticlib::io::reference_source<Source>> make_inflate_source(Source& source) {
-    return inflate_source<staticlib::io::reference_source<Source>>(
-            staticlib::io::make_reference_source(source));
+inflate_source<sl::io::reference_source<Source>> make_inflate_source(Source& source) {
+    return inflate_source<sl::io::reference_source<Source>>(
+            sl::io::make_reference_source(source));
 }
 
 } // namespace

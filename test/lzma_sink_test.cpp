@@ -27,36 +27,28 @@
 #include <iostream>
 
 #include "staticlib/config/assert.hpp"
-#include "staticlib/utils/FileDescriptor.hpp"
 #include "staticlib/io.hpp"
-
-namespace su = staticlib::utils;
-namespace si = staticlib::io;
-namespace sc = staticlib::compress;
+#include "staticlib/tinydir.hpp"
 
 void test_lzma() {
-    std::array<char, 4096> buf;
+    auto fd_comp = sl::tinydir::file_source("../test/data/hello.txt.xz");
+    auto ss_comp = sl::io::string_sink();
+    sl::io::copy_all(fd_comp, ss_comp);
 
-    su::FileDescriptor fd_comp{"../test/data/hello.txt.xz", 'r'};
-    si::string_sink ss_comp{};
-    si::copy_all(fd_comp, ss_comp, buf.data(), buf.size());
-
-    su::FileDescriptor fd{"../test/data/hello.txt", 'r'};
-    si::string_sink ss{};
+    auto fd = sl::tinydir::file_source("../test/data/hello.txt");
+    auto ss = sl::io::string_sink();
     {
-        auto coder = sc::make_lzma_sink(ss);
-        si::copy_all(fd, coder, buf.data(), buf.size());
+        auto coder = sl::compress::make_lzma_sink(ss);
+        sl::io::copy_all(fd, coder);
     }
 
     slassert(ss_comp.get_string() == ss.get_string());
 }
 
 void test_huge() {
-    std::array<char, 4096> buf;
-
-    su::FileDescriptor fd_in{"/home/alex/ebook/maugham/bondage.txt", 'r'};
-    auto coder = sc::make_lzma_sink(su::FileDescriptor{"bondage.txt.xz", 'w'});
-    si::copy_all(fd_in, coder, buf.data(), buf.size());
+    auto fd_in = sl::tinydir::file_source("/home/alex/ebook/maugham/bondage.txt");
+    auto coder = sl::compress::make_lzma_sink(sl::tinydir::file_sink("bondage.txt.xz"));
+    sl::io::copy_all(fd_in, coder);
 }
 
 int main() {

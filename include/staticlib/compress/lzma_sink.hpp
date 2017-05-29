@@ -34,7 +34,7 @@
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
 
-#include "staticlib/compress/CompressException.hpp"
+#include "staticlib/compress/compress_exception.hpp"
 
 namespace staticlib {
 namespace compress {
@@ -88,12 +88,12 @@ public:
             auto err = ::lzma_code(strm, LZMA_FINISH);
             switch (err) {
             case LZMA_OK:
-                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);
+                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});
                 strm->next_out = reinterpret_cast<uint8_t*>(buf);
                 strm->avail_out = buf_size;
                 break;
             case LZMA_STREAM_END:
-                staticlib::io::write_all(*sink, buf, buf_size - strm->avail_out);
+                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});
                 // fall through
             default:
                 // cannot report any error safely - we are in destructor
@@ -178,14 +178,13 @@ public:
     /**
      * Write implementation
      * 
-     * @param b source buffer
-     * @param length number of bytes to process
-     * @return number of bytes processed (read from source buf)
+     * @param span source span
+     * @return number of bytes processed (read from source span)
      */
-    std::streamsize write(const char* buffer, std::streamsize len_in) {
+    std::streamsize write(sl::io::span<const char> span) {
         // prepare lzma stream
-        strm->next_in = reinterpret_cast<const uint8_t*>(buffer);
-        strm->avail_in = static_cast<size_t> (len_in);
+        strm->next_in = reinterpret_cast<const uint8_t*>(span.data());
+        strm->avail_in = static_cast<size_t> (span.size());
         strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
         strm->avail_out = buf.size();
         // call code
@@ -193,15 +192,15 @@ public:
             auto err = ::lzma_code(strm.get(), LZMA_RUN);
             switch (err) {
             case LZMA_OK:
-                staticlib::io::write_all(sink, buf.data(), buf.size() - strm->avail_out);
+                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
                 strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
                 strm->avail_out = buf.size();
                 break;
-            default: throw CompressException(TRACEMSG(std::string() +
-                        "LZMA error code: [" + staticlib::config::to_string(err) + "]"));
+            default: throw compress_exception(TRACEMSG(
+                        "LZMA error code: [" + sl::support::to_string(err) + "]"));
             }
         }
-        return len_in;
+        return span.size_signed();
     }
 
     /**
@@ -222,8 +221,8 @@ private:
             new lzma_stream, detail::LzmaDeleter<Sink>(sink, buf.data(), buf.size())};
         *strm = LZMA_STREAM_INIT;
         auto err = lzma_easy_encoder(strm.get(), compression_level, LZMA_CHECK_CRC64);
-        if (LZMA_OK != err) throw CompressException(TRACEMSG(std::string() +
-                "Error initializing LZMA stream, code: [" + staticlib::config::to_string(err) + "]"));
+        if (LZMA_OK != err) throw compress_exception(TRACEMSG(
+                "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
         return strm;
     }
 
@@ -250,9 +249,9 @@ lzma_sink<Sink> make_lzma_sink(Sink&& sink) {
  * @return lzma sink
  */
 template <typename Sink>
-lzma_sink<staticlib::io::reference_sink<Sink>> make_lzma_sink(Sink& sink) {
-    return lzma_sink<staticlib::io::reference_sink<Sink>> (
-            staticlib::io::make_reference_sink(sink));
+lzma_sink<sl::io::reference_sink<Sink>> make_lzma_sink(Sink& sink) {
+    return lzma_sink<sl::io::reference_sink<Sink>> (
+            sl::io::make_reference_sink(sink));
 }
 
 } // namespace

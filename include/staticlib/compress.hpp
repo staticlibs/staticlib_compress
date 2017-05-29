@@ -24,7 +24,9 @@
 #ifndef STATICLIB_COMPRESS_HPP
 #define	STATICLIB_COMPRESS_HPP
 
-#include "staticlib/compress/CompressException.hpp"
+#include "staticlib/config.hpp"
+
+#include "staticlib/compress/compress_exception.hpp"
 #include "staticlib/compress/deflate_sink.hpp"
 #include "staticlib/compress/inflate_source.hpp"
 #include "staticlib/compress/lzma_sink.hpp"

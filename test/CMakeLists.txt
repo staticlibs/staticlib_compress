@@ -31,9 +31,11 @@ if ( NOT DEFINED STATICLIB_DEPS )
     set ( STATICLIB_DEPS ${CMAKE_CURRENT_LIST_DIR}/../../ CACHE INTERNAL "" )    
 endif ( )
 staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_config )
+staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_support )
 staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_io )
 staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_endian )
 staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_utils )
+staticlib_add_subdirectory ( ${STATICLIB_DEPS}/staticlib_tinydir )
 if ( NOT STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
     staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_zlib )
     staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_xz )
@@ -42,15 +44,17 @@ staticlib_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../../staticlib_compress 
 set ( ${PROJECT_NAME}_DEPS 
         staticlib_compress
         staticlib_config
+        staticlib_support
         staticlib_io
         staticlib_endian
         staticlib_utils
+        staticlib_tinydir
         zlib
         liblzma )
 staticlib_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAME}_DEPS )
 
 # tests
 set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_DEPS_PC_INCLUDE_DIRS} )
-set ( ${PROJECT_NAME}_TEST_LIBS ${${PROJECT_NAME}_DEPS_PC_LIBRARIES} )
+set ( ${PROJECT_NAME}_TEST_LIBS ${${PROJECT_NAME}_DEPS_PC_STATIC_LIBRARIES} )
 set ( ${PROJECT_NAME}_TEST_OPTS ${${PROJECT_NAME}_DEPS_PC_CFLAGS_OTHER} )
 staticlib_enable_testing ( ${PROJECT_NAME}_TEST_INCLUDES ${PROJECT_NAME}_TEST_LIBS ${PROJECT_NAME}_TEST_OPTS )

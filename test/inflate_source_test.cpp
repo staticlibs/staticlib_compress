@@ -27,28 +27,21 @@
 #include <iostream>
 
 #include "staticlib/config/assert.hpp"
-#include "staticlib/utils/FileDescriptor.hpp"
 #include "staticlib/io.hpp"
-
-namespace su = staticlib::utils;
-namespace si = staticlib::io;
-namespace sc = staticlib::compress;
+#include "staticlib/tinydir.hpp"
 
 void test_inflate() {
-    su::FileDescriptor fd{"../test/data/hello.txt.deflate", 'r'};
-    auto inflater = sc::make_inflate_source(fd);
-    si::string_sink ss{};
-    std::array<char, 4096> buf;
-    si::copy_all(inflater, ss, buf.data(), buf.size());
+    auto fd = sl::tinydir::file_source("../test/data/hello.txt.deflate");
+    auto inflater = sl::compress::make_inflate_source(fd);
+    auto ss = sl::io::string_sink();
+    sl::io::copy_all(inflater, ss);
     slassert("hello" == ss.get_string());
 }
 
 void test_huge() {
-    std::array<char, 4096> buf;
-
-    auto inflater = sc::make_inflate_source(su::FileDescriptor{"winxp_printer.vdi.deflate", 'r'});
-    su::FileDescriptor fd_out{"winxp_printer.vdi", 'w'};
-    si::copy_all(inflater, fd_out, buf.data(), buf.size());
+    auto inflater = sl::compress::make_inflate_source(sl::tinydir::file_source("winxp_printer.vdi.deflate"));
+    auto fd_out = sl::tinydir::file_sink("winxp_printer.vdi");
+    sl::io::copy_all(inflater, fd_out);
 }
 
 int main() {

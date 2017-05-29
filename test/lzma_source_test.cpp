@@ -27,28 +27,21 @@
 #include <iostream>
 
 #include "staticlib/config/assert.hpp"
-#include "staticlib/utils/FileDescriptor.hpp"
 #include "staticlib/io.hpp"
-
-namespace su = staticlib::utils;
-namespace si = staticlib::io;
-namespace sc = staticlib::compress;
+#include "staticlib/tinydir.hpp"
 
 void test_lzma() {
-    su::FileDescriptor fd{"../test/data/hello.txt.xz", 'r'};
-    auto coder = sc::make_lzma_source(fd);
-    si::string_sink ss{};
-    std::array<char, 4096> buf;
-    si::copy_all(coder, ss, buf.data(), buf.size());
+    auto fd = sl::tinydir::file_source("../test/data/hello.txt.xz");
+    auto coder = sl::compress::make_lzma_source(fd);
+    auto ss = sl::io::string_sink();
+    sl::io::copy_all(coder, ss);
     slassert("hello" == ss.get_string());
 }
 
 void test_huge() {
-    std::array<char, 4096> buf;
-
-    auto inflater = sc::make_lzma_source(su::FileDescriptor{"bondage.txt.xz", 'r'});
-    su::FileDescriptor fd_out{"bondage.txt", 'w'};
-    si::copy_all(inflater, fd_out, buf.data(), buf.size());
+    auto inflater = sl::compress::make_lzma_source(sl::tinydir::file_source("bondage.txt.xz"));
+    auto fd_out = sl::tinydir::file_sink("bondage.txt");
+    sl::io::copy_all(inflater, fd_out);
 }
 
 int main() {

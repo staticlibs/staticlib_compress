@@ -27,36 +27,28 @@
 #include <iostream>
 
 #include "staticlib/config/assert.hpp"
-#include "staticlib/utils/FileDescriptor.hpp"
 #include "staticlib/io.hpp"
-
-namespace su = staticlib::utils;
-namespace si = staticlib::io;
-namespace sc = staticlib::compress;
+#include "staticlib/tinydir.hpp"
 
 void test_deflate() {
-    std::array<char, 4096> buf;
+    auto fd_comp = sl::tinydir::file_source("../test/data/hello.txt.deflate");
+    auto ss_comp = sl::io::string_sink();
+    sl::io::copy_all(fd_comp, ss_comp);
     
-    su::FileDescriptor fd_comp{"../test/data/hello.txt.deflate", 'r'};
-    si::string_sink ss_comp{};
-    si::copy_all(fd_comp, ss_comp, buf.data(), buf.size());
-    
-    su::FileDescriptor fd{"../test/data/hello.txt", 'r'};
-    si::string_sink ss{};
+    auto fd = sl::tinydir::file_source("../test/data/hello.txt");
+    auto ss = sl::io::string_sink();
     {
-        auto deflater = sc::make_deflate_sink(ss);
-        si::copy_all(fd, deflater, buf.data(), buf.size());
+        auto deflater = sl::compress::make_deflate_sink(ss);
+        sl::io::copy_all(fd, deflater);
     }
     
     slassert(ss_comp.get_string() == ss.get_string());
 }
 
 void test_huge() {
-    std::array<char, 4096> buf;
-
-    su::FileDescriptor fd_in{"/home/alex/vbox/hd/winxp_printer.vdi", 'r'};
-    auto deflater = sc::make_deflate_sink(su::FileDescriptor{"winxp_printer.vdi.deflate", 'w'});
-    si::copy_all(fd_in, deflater, buf.data(), buf.size());
+    auto fd_in = sl::tinydir::file_source("/home/alex/vbox/hd/winxp_printer.vdi");
+    auto deflater = sl::compress::make_deflate_sink(sl::tinydir::file_sink("winxp_printer.vdi.deflate"));
+    sl::io::copy_all(fd_in, deflater);
 }
 
 int main() {

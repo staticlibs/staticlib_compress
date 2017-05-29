@@ -34,7 +34,7 @@
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
 
-#include "staticlib/compress/CompressException.hpp"
+#include "staticlib/compress/compress_exception.hpp"
 
 
 namespace staticlib {
@@ -141,27 +141,26 @@ public:
     /**
      * Read implementation
      * 
-     * @param buffer output buffer
-     * @param len_out number of bytes to process
-     * @return number of bytes written into specified buf
+     * @param span output span
+     * @return number of bytes written into specified span
      */
-    std::streamsize read(char* buffer, std::streamsize len_out) {
+    std::streamsize read(sl::io::span<char> span) {
         if (!exhausted) {
             // fill buffer if empty
             if (0 == avail) {
-                avail = staticlib::io::read_all(src, buf.data(), buf.size());
+                avail = sl::io::read_all(src, {buf.data(), buf.size()});
                 pos = 0;
             }
             // prepare zlib stream
             strm->next_in = reinterpret_cast<uint8_t*> (buf.data() + pos);
             strm->avail_in = avail;
-            strm->next_out = reinterpret_cast<uint8_t*> (buffer);
-            strm->avail_out = static_cast<size_t> (len_out);
+            strm->next_out = reinterpret_cast<uint8_t*> (span.data());
+            strm->avail_out = static_cast<size_t> (span.size());
             // call inflate
             auto err = ::lzma_code(strm.get(), LZMA_RUN);
             if (LZMA_OK == err || LZMA_STREAM_END == err) {
                 std::streamsize read = avail - strm->avail_in;
-                std::streamsize written = len_out - strm->avail_out;
+                std::streamsize written = span.size_signed() - strm->avail_out;
                 size_t uread = static_cast<size_t> (read);
                 pos += uread;
                 avail -= uread;
@@ -170,8 +169,8 @@ public:
                 }
                 exhausted = true;
                 return std::char_traits<char>::eof();
-            } else throw CompressException(TRACEMSG(std::string()
-                    + "LZMA error, code: [" + staticlib::config::to_string(err) + "]"));
+            } else throw compress_exception(TRACEMSG(
+                    + "LZMA error, code: [" + sl::support::to_string(err) + "]"));
         } else {
             return std::char_traits<char>::eof();
         }
@@ -192,8 +191,8 @@ private:
         std::unique_ptr<lzma_stream, detail::LzmaDeleter> strm{new lzma_stream, detail::LzmaDeleter()};
         *strm = LZMA_STREAM_INIT;
         auto err = lzma_stream_decoder(strm.get(), UINT64_MAX, 0);
-        if (LZMA_OK != err) throw CompressException(TRACEMSG(std::string() +
-                "Error initializing LZMA stream, code: [" + staticlib::config::to_string(err) + "]"));
+        if (LZMA_OK != err) throw compress_exception(TRACEMSG(
+                "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
         return strm;
     }
 
@@ -220,9 +219,9 @@ lzma_source<Source> make_lzma_source(Source&& source) {
  * @return lzma source
  */
 template <typename Source>
-lzma_source<staticlib::io::reference_source<Source>> make_lzma_source(Source& source) {
-    return lzma_source<staticlib::io::reference_source<Source>> (
-            staticlib::io::make_reference_source(source));
+lzma_source<sl::io::reference_source<Source>> make_lzma_source(Source& source) {
+    return lzma_source<sl::io::reference_source<Source>> (
+            sl::io::make_reference_source(source));
 }
 
 } // namespace
