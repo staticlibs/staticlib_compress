@@ -26,6 +26,8 @@ project ( staticlib_compress_test CXX )
 include ( ${STATICLIB_CMAKE}/staticlibs_common.cmake )
 staticlib_enable_deplibs_cache ( )
 
+set ( staticlib_compress_ENABLE_XZ ON CACHE BOOL "")
+
 # dependencies
 if ( NOT DEFINED STATICLIB_DEPS )
     set ( STATICLIB_DEPS ${CMAKE_CURRENT_LIST_DIR}/../../ CACHE INTERNAL "" )    

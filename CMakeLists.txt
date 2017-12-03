@@ -20,6 +20,8 @@ set ( ${PROJECT_NAME}_DESCRIPTION "Staticlibs Compress library" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/staticlib_compress )
 include ( ${CMAKE_CURRENT_LIST_DIR}/resources/macros.cmake )
 
+option ( ${PROJECT_NAME}_ENABLE_XZ "Enable support for XZ" OFF )
+
 # docs
 option ( ${PROJECT_NAME}_ENABLE_DOCS "Generate doxyfile and exit build" OFF )
 if ( ${PROJECT_NAME}_ENABLE_DOCS )
@@ -34,7 +36,9 @@ endif ( )
 if ( NOT DEFINED STATICLIB_TOOLCHAIN )
     if ( NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" ) 
         staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_zlib )
-        staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_xz )
+        if ( ${PROJECT_NAME}_ENABLE_XZ )
+            staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_xz )
+        endif ( )
     endif ( )
     staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../staticlib_config )
     staticlib_compress_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../staticlib_support )
@@ -48,7 +52,10 @@ source_group ( "include" FILES ${${PROJECT_NAME}_HEADERS} )
 add_custom_target ( ${PROJECT_NAME} SOURCES ${${PROJECT_NAME}_HEADERS} )
 
 # pkg-config
-set ( ${PROJECT_NAME}_PC_REQUIRES "zlib liblzma" )
+set ( ${PROJECT_NAME}_PC_REQUIRES "zlib" )
 set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/include -DZLIB_CONST" )
+if ( ${PROJECT_NAME}_ENABLE_XZ )
+    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -DSTATCILIB_COMPRESS_ENABLE_XZ" )
+endif ( )
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/${PROJECT_NAME}.pc )

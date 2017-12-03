@@ -29,8 +29,10 @@
 #include "staticlib/compress/compress_exception.hpp"
 #include "staticlib/compress/deflate_sink.hpp"
 #include "staticlib/compress/inflate_source.hpp"
+#ifdef STATCILIB_COMPRESS_ENABLE_XZ
 #include "staticlib/compress/lzma_sink.hpp"
 #include "staticlib/compress/lzma_source.hpp"
+#endif // STATCILIB_COMPRESS_ENABLE_XZ
 #include "staticlib/compress/zip_sink.hpp"
 
 #endif	/* STATICLIB_COMPRESS_HPP */
