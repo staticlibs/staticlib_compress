@@ -22,7 +22,7 @@
  */
 
 #ifndef STATICLIB_COMPRESS_LZMA_SOURCE_HPP
-#define	STATICLIB_COMPRESS_LZMA_SOURCE_HPP
+#define STATICLIB_COMPRESS_LZMA_SOURCE_HPP
 
 #include <cstdint>
 #include <cstdlib>
@@ -225,5 +225,5 @@ lzma_source<sl::io::reference_source<Source>> make_lzma_source(Source& source) {
 }
 
 
-#endif	/* STATICLIB_COMPRESS_LZMA_SOURCE_HPP */
+#endif /* STATICLIB_COMPRESS_LZMA_SOURCE_HPP */
 

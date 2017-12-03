@@ -22,7 +22,7 @@
  */
 
 #ifndef STATICLIB_COMPRESS_DEFLATE_SINK_HPP
-#define	STATICLIB_COMPRESS_DEFLATE_SINK_HPP
+#define STATICLIB_COMPRESS_DEFLATE_SINK_HPP
 
 #include <cstdlib>
 #include <cstring>
@@ -234,5 +234,5 @@ deflate_sink<sl::io::reference_sink<Sink>> make_deflate_sink(Sink& sink) {
 } // namespace
 }
 
-#endif	/* STATICLIB_COMPRESS_DEFLATE_SINK_HPP */
+#endif /* STATICLIB_COMPRESS_DEFLATE_SINK_HPP */
 

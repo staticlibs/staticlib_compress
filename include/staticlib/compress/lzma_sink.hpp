@@ -22,7 +22,7 @@
  */
 
 #ifndef STATICLIB_COMPRESS_LZMA_SINK_HPP
-#define	STATICLIB_COMPRESS_LZMA_SINK_HPP
+#define STATICLIB_COMPRESS_LZMA_SINK_HPP
 
 #include <cstdint>
 #include <cstdlib>
@@ -234,5 +234,5 @@ lzma_sink<sl::io::reference_sink<Sink>> make_lzma_sink(Sink& sink) {
 }
 
 
-#endif	/* STATICLIB_COMPRESS_LZMA_SINK_HPP */
+#endif /* STATICLIB_COMPRESS_LZMA_SINK_HPP */
 

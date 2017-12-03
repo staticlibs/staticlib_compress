@@ -22,7 +22,7 @@
  */
 
 #ifndef STATICLIB_COMPRESS_ZIP_SINK_HPP
-#define	STATICLIB_COMPRESS_ZIP_SINK_HPP
+#define STATICLIB_COMPRESS_ZIP_SINK_HPP
 
 #include <ios>
 #include <memory>
@@ -37,6 +37,7 @@
 
 #include "staticlib/compress/compress_exception.hpp"
 #include "staticlib/compress/deflate_sink.hpp"
+#include "staticlib/compress/zip_compression_method.hpp"
 
 namespace staticlib {
 namespace compress {
@@ -182,12 +183,6 @@ void write_eocd(Sink& sink, uint16_t files_count, uint32_t cd_offset,  uint32_t 
  */
 template <typename Sink>
 class zip_sink {
-public:
-    enum class compression_method : uint16_t {
-        store = 0,
-        deflate = 0x8
-    };
-
 private:
     // stream shortcuts
     using sink_ref_type = sl::io::reference_sink<sl::io::counting_sink<Sink>>;
@@ -197,7 +192,7 @@ private:
     /**
      * Destination sink for the zipped data
      */
-    compression_method method = compression_method::deflate;
+    zip_compression_method method = zip_compression_method::deflate;
     sl::io::counting_sink<Sink> sink;
     std::vector<detail::Header> headers;
     bool cd_written = false;
@@ -379,5 +374,5 @@ zip_sink<sl::io::reference_sink<Sink>> make_zip_sink(Sink& sink) {
 } // namespace
 }
 
-#endif	/* STATICLIB_COMPRESS_ZIP_SINK_HPP */
+#endif /* STATICLIB_COMPRESS_ZIP_SINK_HPP */
 

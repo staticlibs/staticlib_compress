@@ -22,7 +22,7 @@
  */
 
 #ifndef STATICLIB_COMPRESS_HPP
-#define	STATICLIB_COMPRESS_HPP
+#define STATICLIB_COMPRESS_HPP
 
 #include "staticlib/config.hpp"
 
@@ -33,7 +33,8 @@
 #include "staticlib/compress/lzma_sink.hpp"
 #include "staticlib/compress/lzma_source.hpp"
 #endif // STATCILIB_COMPRESS_ENABLE_XZ
+#include "staticlib/compress/zip_compression_method.hpp"
 #include "staticlib/compress/zip_sink.hpp"
 
-#endif	/* STATICLIB_COMPRESS_HPP */
+#endif /* STATICLIB_COMPRESS_HPP */
 

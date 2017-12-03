@@ -22,7 +22,7 @@
  */
 
 #ifndef STATICLIB_COMPRESS_INFLATE_SOURCE_HPP
-#define	STATICLIB_COMPRESS_INFLATE_SOURCE_HPP
+#define STATICLIB_COMPRESS_INFLATE_SOURCE_HPP
 
 #include <cstdint>
 #include <cstring>
@@ -221,4 +221,4 @@ inflate_source<sl::io::reference_source<Source>> make_inflate_source(Source& sou
 } // namespace
 }
 
-#endif	/* STATICLIB_COMPRESS_INFLATE_SOURCE_HPP */
+#endif /* STATICLIB_COMPRESS_INFLATE_SOURCE_HPP */
