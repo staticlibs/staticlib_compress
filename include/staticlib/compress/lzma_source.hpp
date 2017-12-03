@@ -24,10 +24,12 @@
 #ifndef STATICLIB_COMPRESS_LZMA_SOURCE_HPP
 #define	STATICLIB_COMPRESS_LZMA_SOURCE_HPP
 
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
 #include <ios>
 #include <memory>
 #include <type_traits>
-#include <cstdint>
 
 #include "lzma.h"
 
@@ -40,19 +42,6 @@
 namespace staticlib {
 namespace compress {
 
-namespace detail {
-
-class LzmaDeleter {
-public:
-
-    void operator()(lzma_stream* strm) {
-        ::lzma_end(strm);
-        delete strm;
-    }
-};
-
-} // namespace
-
 /**
  * Source wrapper that decompresses deflated data
  */
@@ -63,13 +52,13 @@ class lzma_source {
      */
     Source src;
     /**
-     * LZMA decompressing stream
-     */
-    std::unique_ptr<lzma_stream, detail::LzmaDeleter> strm;
-    /**
      * Internal buffer
      */
     std::array<char, buf_size> buf;
+    /**
+     * LZMA decompressing stream
+     */
+    lzma_stream* strm;
     /**
      * Start position in internal buffer
      */
@@ -92,7 +81,23 @@ public:
      */
     lzma_source(Source src) :
     src(std::move(src)),
-    strm(create_stream()) { }
+    strm([] {
+        lzma_stream* strm = static_cast<lzma_stream*> (std::malloc(sizeof(lzma_stream)));
+        if (nullptr == strm) throw compress_exception(TRACEMSG(
+                "Error creating lzma stream: 'malloc' failed"));
+        *strm = LZMA_STREAM_INIT;
+        auto err = lzma_stream_decoder(strm, UINT64_MAX, 0);
+        if (LZMA_OK != err) throw compress_exception(TRACEMSG(
+                "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
+        return strm;
+        
+    }()) { }
+
+    ~lzma_source() STATICLIB_NOEXCEPT {
+        if (nullptr == strm) return;
+        ::lzma_end(strm);
+        std::free(strm);
+    }
 
     /**
      * Deleted copy constructor
@@ -116,11 +121,13 @@ public:
      */
     lzma_source(lzma_source&& other) :
     src(std::move(other.src)),
-    strm(std::move(other.strm)),
     buf(std::move(other.buf)),
+    strm(other.strm),
     pos(other.pos),
     avail(other.avail),
-    exhausted(other.exhausted) { }
+    exhausted(other.exhausted) {
+        other.strm = nullptr;
+    }
 
     /**
      * Move assignment operator
@@ -130,8 +137,9 @@ public:
      */
     lzma_source& operator=(lzma_source&& other) {
         src = std::move(other.src);
-        strm = std::move(other.strm);
         buf = std::move(other.buf);
+        strm = other.strm;
+        other.strm = nullptr;
         pos = other.pos;
         avail = other.avail;
         exhausted = other.exhausted;
@@ -157,7 +165,7 @@ public:
             strm->next_out = reinterpret_cast<uint8_t*> (span.data());
             strm->avail_out = static_cast<size_t> (span.size());
             // call inflate
-            auto err = ::lzma_code(strm.get(), LZMA_RUN);
+            auto err = ::lzma_code(strm, LZMA_RUN);
             if (LZMA_OK == err || LZMA_STREAM_END == err) {
                 std::streamsize read = avail - strm->avail_in;
                 std::streamsize written = span.size_signed() - strm->avail_out;
@@ -183,17 +191,6 @@ public:
      */
     Source& get_source() {
         return src;
-    }
-
-private:
-
-    static std::unique_ptr<lzma_stream, detail::LzmaDeleter> create_stream() {
-        std::unique_ptr<lzma_stream, detail::LzmaDeleter> strm{new lzma_stream, detail::LzmaDeleter()};
-        *strm = LZMA_STREAM_INIT;
-        auto err = lzma_stream_decoder(strm.get(), UINT64_MAX, 0);
-        if (LZMA_OK != err) throw compress_exception(TRACEMSG(
-                "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
-        return strm;
     }
 
 };

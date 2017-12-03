@@ -24,6 +24,8 @@
 #ifndef STATICLIB_COMPRESS_DEFLATE_SINK_HPP
 #define	STATICLIB_COMPRESS_DEFLATE_SINK_HPP
 
+#include <cstdlib>
+#include <cstring>
 #include <ios>
 #include <memory>
 #include <type_traits>
@@ -32,79 +34,12 @@
 
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
+#include "staticlib/support.hpp"
 
 #include "staticlib/compress/compress_exception.hpp"
 
 namespace staticlib {
 namespace compress {
-
-namespace detail {
-
-template <typename Sink>
-class DeflateDeleter {
-    Sink* sink;
-    char* buf;
-    size_t buf_size;
-public:
-    DeflateDeleter(Sink& sink, char* buf, size_t buf_size) :
-    sink(std::addressof(sink)),
-    buf(buf),
-    buf_size(buf_size) { }
-
-    DeflateDeleter(const DeflateDeleter& other) :
-    sink(other.sink),
-    buf(other.buf),
-    buf_size(other.buf_size) { }
-
-    DeflateDeleter& operator=(const DeflateDeleter& other) {
-        sink = other.sink;
-        buf = other.buf;
-        buf_size = other.buf_size;
-        return *this;
-    }
-
-    DeflateDeleter(DeflateDeleter&& other) :
-    sink(other.sink),
-    buf(other.buf),
-    buf_size(other.buf_size) { }
-
-    DeflateDeleter& operator=(DeflateDeleter&& other) {
-        sink = other.sink;
-        buf = other.buf;
-        buf_size = other.buf_size;
-        return *this;
-    }
-    
-    void operator()(z_stream* strm) {
-        // finish encoding
-        strm->next_in = nullptr;
-        strm->avail_in = 0;
-        strm->next_out = reinterpret_cast<unsigned char*> (buf);
-        strm->avail_out = static_cast<uInt> (buf_size);
-        // call deflate
-        for(;;) {
-            auto err = ::deflate(strm, Z_FINISH);
-            switch (err) {
-            case Z_OK:
-                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});
-                strm->next_out = reinterpret_cast<unsigned char*> (buf);
-                strm->avail_out = static_cast<uInt> (buf_size);
-                break;
-            case Z_STREAM_END:
-                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});                
-                // fall through
-            default:
-                // cannot report any error safely - we are in destructor
-                goto end;
-            }
-        }
-    end: 
-        ::deflateEnd(strm);
-        delete strm;
-    }
-};
-
-} // namespace
 
 /**
  * Sink wrapper that compressed written data using Deflate algorithm
@@ -122,7 +57,7 @@ class deflate_sink {
     /**
      * Zlib compressing stream
      */
-    std::unique_ptr<z_stream, detail::DeflateDeleter<Sink>> strm;
+    z_stream* strm;
     
 public:
     
@@ -133,7 +68,51 @@ public:
      */
     deflate_sink(Sink&& sink) :
     sink(std::move(sink)),
-    strm(create_stream()) { }
+    strm([] {
+        z_stream* strm = static_cast<z_stream*> (std::malloc(sizeof(z_stream)));
+        if (nullptr == strm) throw compress_exception(TRACEMSG(
+                "Error creating deflate stream: 'malloc' failed"));
+        std::memset(strm, 0, sizeof (z_stream));
+        auto err = deflateInit2(strm, compression_level, Z_DEFLATED, -MAX_WBITS, 8, Z_DEFAULT_STRATEGY);
+        if (Z_OK != err) throw compress_exception(TRACEMSG(
+                "Error initializing deflate stream: [" + ::zError(err) + "]"));
+        return strm;
+    }()) { }
+
+    ~deflate_sink() STATICLIB_NOEXCEPT {
+        if (nullptr == strm) return;
+        auto deferred = sl::support::defer([this]() STATICLIB_NOEXCEPT {
+            ::deflateEnd(this->strm);
+            ::free(this->strm);
+        });
+        // finish encoding
+        strm->next_in = nullptr;
+        strm->avail_in = 0;
+        strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
+        strm->avail_out = static_cast<uInt> (buf.size());
+        // call deflate
+        bool deflating = true;
+        while(deflating) {
+            auto err = ::deflate(strm, Z_FINISH);
+            // cannot report any error safely - we are in destructor
+            switch (err) {
+            case Z_OK:
+                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
+                strm->avail_out = static_cast<uInt> (buf.size());
+                // still not finished
+                break;
+            case Z_STREAM_END:
+                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                // finished
+                deflating = false;
+                break;
+            default:
+                // finish
+                deflating = false;
+            }
+        }
+    }
     
     /**
      * Deleted copy constructor
@@ -158,7 +137,9 @@ public:
     deflate_sink(deflate_sink&& other) :
     sink(std::move(other.sink)),
     buf(std::move(other.buf)),
-    strm(std::move(other.strm)) { }
+    strm(other.strm) {
+        other.strm = nullptr;
+    }
 
     /**
      * Move assignment operator
@@ -169,7 +150,8 @@ public:
     deflate_sink& operator=(deflate_sink&& other) {
         sink = std::move(other.sink);
         buf = std::move(other.buf);
-        strm = std::move(other.strm);
+        strm = other.strm;
+        other.strm = nullptr;
         return *this;
     }
 
@@ -187,7 +169,7 @@ public:
         strm->avail_out = static_cast<uInt> (buf.size());
         // call deflate
         while(strm->avail_in > 0) {
-            auto err = ::deflate(strm.get(), Z_NO_FLUSH);
+            auto err = ::deflate(strm, Z_NO_FLUSH);
             switch (err) {
             case Z_OK:
                 sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
@@ -211,19 +193,16 @@ public:
         // but it will make output result non-deterministic
         return sink.flush();
     }
-    
-private:
 
-    std::unique_ptr<z_stream, detail::DeflateDeleter<Sink>> create_stream() {
-        std::unique_ptr<z_stream, detail::DeflateDeleter<Sink>> strm{
-            new z_stream, detail::DeflateDeleter<Sink>(sink, buf.data(), buf.size())};
-        std::memset(strm.get(), 0, sizeof (z_stream));
-        auto err = deflateInit(strm.get(), compression_level);
-        if (Z_OK != err) throw compress_exception(TRACEMSG(
-                "Error initializing deflate stream: [" + ::zError(err) + "]"));
-        return strm;
+    /**
+     * Underlying sink accessor
+     * 
+     * @return underlying sink reference
+     */
+    Sink& get_sink() {
+        return sink;
     }
-    
+
 };
 
 /**

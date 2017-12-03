@@ -24,10 +24,11 @@
 #ifndef STATICLIB_COMPRESS_INFLATE_SOURCE_HPP
 #define	STATICLIB_COMPRESS_INFLATE_SOURCE_HPP
 
+#include <cstdint>
+#include <cstring>
 #include <ios>
 #include <memory>
 #include <type_traits>
-#include <cstdint>
 
 #include "zlib.h"
 
@@ -40,18 +41,6 @@
 namespace staticlib {
 namespace compress {
 
-namespace detail {
-
-class InflateDeleter {
-public:
-    void operator()(z_stream* strm) {
-        ::inflateEnd(strm);
-        delete strm;
-    }
-};
-
-} // namespace
-
 /**
  * Source wrapper that decompresses deflated data
  */
@@ -62,13 +51,13 @@ class inflate_source {
      */
     Source src;
     /**
-     * Zlib decompressing stream
-     */
-    std::unique_ptr<z_stream, detail::InflateDeleter> strm;
-    /**
      * Internal buffer
      */
     std::array<char, buf_size> buf;
+    /**
+     * Zlib decompressing stream
+     */
+    z_stream* strm;
     /**
      * Start position in internal buffer
      */
@@ -90,7 +79,22 @@ public:
      */
     inflate_source(Source src) :
     src(std::move(src)),
-    strm(create_stream()) { }
+    strm([]{
+        z_stream* strm = static_cast<z_stream*> (std::malloc(sizeof(z_stream)));
+        if (nullptr == strm) throw compress_exception(TRACEMSG(
+                "Error creating inflate stream: 'malloc' failed"));
+        std::memset(strm, 0, sizeof (z_stream));
+        auto err = inflateInit2(strm, -MAX_WBITS);
+        if (Z_OK != err) throw compress_exception(TRACEMSG(
+                "Error initializing inflate stream: [" + ::zError(err) + "]"));
+        return strm;
+    }()) { }
+
+    ~inflate_source() STATICLIB_NOEXCEPT {
+        if (nullptr == strm) return;
+        ::inflateEnd(strm);
+        std::free(strm);
+    }
 
     /**
      * Deleted copy constructor
@@ -114,11 +118,13 @@ public:
      */
     inflate_source(inflate_source&& other) :
     src(std::move(other.src)),
-    strm(std::move(other.strm)),
     buf(std::move(other.buf)),
+    strm(other.strm),
     pos(other.pos),
     avail(other.avail),
-    exhausted(other.exhausted) { }
+    exhausted(other.exhausted) {
+        other.strm = nullptr;
+    }
 
     /**
      * Move assignment operator
@@ -128,8 +134,9 @@ public:
      */
     inflate_source& operator=(inflate_source&& other) {
         src = std::move(other.src);
-        strm = std::move(other.strm);
         buf = std::move(other.buf);
+        strm = other.strm;
+        other.strm = nullptr;
         pos = other.pos;
         avail = other.avail;
         exhausted = other.exhausted;
@@ -155,7 +162,7 @@ public:
             strm->next_out = reinterpret_cast<unsigned char*> (span.data());
             strm->avail_out = static_cast<uInt> (span.size());
             // call inflate
-            auto err = ::inflate(strm.get(), Z_FINISH);
+            auto err = ::inflate(strm, Z_FINISH);
             if (Z_OK == err || Z_STREAM_END == err || Z_BUF_ERROR == err) {
                 std::streamsize read = avail - strm->avail_in;
                 std::streamsize written = span.size_signed() - strm->avail_out;
@@ -182,17 +189,6 @@ public:
     Source& get_source() {
         return src;
     }  
-    
-private:
-
-    static std::unique_ptr<z_stream, detail::InflateDeleter> create_stream() {
-        std::unique_ptr<z_stream, detail::InflateDeleter> strm{new z_stream, detail::InflateDeleter()};
-        std::memset(strm.get(), 0, sizeof (z_stream));
-        auto err = inflateInit2(strm.get(), 0);
-        if (Z_OK != err) throw compress_exception(TRACEMSG(
-                "Error initializing inflate stream: [" + ::zError(err) + "]"));
-        return strm;
-    }   
     
 };
 

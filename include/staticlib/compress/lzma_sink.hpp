@@ -24,89 +24,23 @@
 #ifndef STATICLIB_COMPRESS_LZMA_SINK_HPP
 #define	STATICLIB_COMPRESS_LZMA_SINK_HPP
 
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
 #include <ios>
 #include <memory>
 #include <type_traits>
-#include <cstdint>
 
 #include "lzma.h"
 
 #include "staticlib/config.hpp"
 #include "staticlib/io.hpp"
+#include "staticlib/support.hpp"
 
 #include "staticlib/compress/compress_exception.hpp"
 
 namespace staticlib {
 namespace compress {
-
-namespace detail {
-
-template <typename Sink>
-class LzmaDeleter {
-    Sink* sink;
-    char* buf;
-    size_t buf_size;
-public:
-
-    LzmaDeleter(Sink& sink, char* buf, size_t buf_size) :
-    sink(std::addressof(sink)),
-    buf(buf),
-    buf_size(buf_size) { }
-
-    LzmaDeleter(const LzmaDeleter& other) :
-    sink(other.sink),
-    buf(other.buf),
-    buf_size(other.buf_size) { }
-
-    LzmaDeleter& operator=(const LzmaDeleter& other) {
-        sink = other.sink;
-        buf = other.buf;
-        buf_size = other.buf_size;
-        return *this;
-    }
-
-    LzmaDeleter(LzmaDeleter&& other) :
-    sink(other.sink),
-    buf(other.buf),
-    buf_size(other.buf_size) { }
-
-    LzmaDeleter& operator=(LzmaDeleter&& other) {
-        sink = other.sink;
-        buf = other.buf;
-        buf_size = other.buf_size;
-        return *this;
-    }
-
-    void operator()(lzma_stream* strm) {
-        // finish encoding
-        strm->next_in = nullptr;
-        strm->avail_in = 0;
-        strm->next_out = reinterpret_cast<uint8_t*>(buf);
-        strm->avail_out = buf_size;
-        // call deflate
-        for (;;) {
-            auto err = ::lzma_code(strm, LZMA_FINISH);
-            switch (err) {
-            case LZMA_OK:
-                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});
-                strm->next_out = reinterpret_cast<uint8_t*>(buf);
-                strm->avail_out = buf_size;
-                break;
-            case LZMA_STREAM_END:
-                sl::io::write_all(*sink, {buf, buf_size - strm->avail_out});
-                // fall through
-            default:
-                // cannot report any error safely - we are in destructor
-                goto end;
-            }
-        }
-    end:
-        ::lzma_end(strm);
-        delete strm;
-    }
-};
-
-} // namespace
 
 /**
  * Sink wrapper that compressed written data using LZMA algorithm
@@ -124,7 +58,7 @@ class lzma_sink {
     /**
      * LZMA compressing stream
      */
-    std::unique_ptr<lzma_stream, detail::LzmaDeleter<Sink>> strm;
+    lzma_stream* strm;
 
 public:
 
@@ -135,7 +69,50 @@ public:
      */
     lzma_sink(Sink&& sink) :
     sink(std::move(sink)),
-    strm(create_stream()) { }
+    strm([] {
+        lzma_stream* strm = static_cast<lzma_stream*> (std::malloc(sizeof(lzma_stream)));
+        if (nullptr == strm) throw compress_exception(TRACEMSG(
+                "Error creating lzma stream: 'malloc' failed"));
+        *strm = LZMA_STREAM_INIT;
+        auto err = ::lzma_easy_encoder(strm, compression_level, LZMA_CHECK_CRC64);
+        if (LZMA_OK != err) throw compress_exception(TRACEMSG(
+                "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
+        return strm;
+    }()) { }
+
+    ~lzma_sink() STATICLIB_NOEXCEPT {
+        if (nullptr == strm) return;
+        auto deferred = sl::support::defer([this]() STATICLIB_NOEXCEPT {
+            ::lzma_end(this->strm);
+            ::free(this->strm);
+        });
+        // finish encoding
+        strm->next_in = nullptr;
+        strm->avail_in = 0;
+        strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
+        strm->avail_out = buf.size();
+        // call code
+        bool coding = true;
+        while (coding) {
+            auto err = ::lzma_code(strm, LZMA_FINISH);
+            switch (err) {
+            case LZMA_OK:
+                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
+                strm->avail_out = buf.size();
+                // not finished
+                break;
+            case LZMA_STREAM_END:
+                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                // finished
+                coding = false;
+                break;
+            default:
+                // finish
+                coding = false;
+            }
+        }
+    }
 
     /**
      * Deleted copy constructor
@@ -160,7 +137,9 @@ public:
     lzma_sink(lzma_sink&& other) :
     sink(std::move(other.sink)),
     buf(std::move(other.buf)),
-    strm(std::move(other.strm)) { }
+    strm(other.strm) {
+        other.strm = nullptr;
+    }
 
     /**
      * Move assignment operator
@@ -171,7 +150,8 @@ public:
     lzma_sink& operator=(lzma_sink&& other) {
         sink = std::move(other.sink);
         buf = std::move(other.buf);
-        strm = std::move(other.strm);
+        strm = other.strm;
+        other.strm = nullptr;
         return *this;
     }
 
@@ -189,7 +169,7 @@ public:
         strm->avail_out = buf.size();
         // call code
         while (strm->avail_in > 0) {
-            auto err = ::lzma_code(strm.get(), LZMA_RUN);
+            auto err = ::lzma_code(strm, LZMA_RUN);
             switch (err) {
             case LZMA_OK:
                 sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
@@ -214,18 +194,14 @@ public:
         return sink.flush();
     }
 
-private:
-
-    std::unique_ptr<lzma_stream, detail::LzmaDeleter<Sink>> create_stream() {
-        std::unique_ptr<lzma_stream, detail::LzmaDeleter<Sink>>strm {
-            new lzma_stream, detail::LzmaDeleter<Sink>(sink, buf.data(), buf.size())};
-        *strm = LZMA_STREAM_INIT;
-        auto err = lzma_easy_encoder(strm.get(), compression_level, LZMA_CHECK_CRC64);
-        if (LZMA_OK != err) throw compress_exception(TRACEMSG(
-                "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
-        return strm;
+    /**
+     * Underlying sink accessor
+     * 
+     * @return underlying sink reference
+     */
+    Sink& get_sink() {
+        return sink;
     }
-
 };
 
 /**
