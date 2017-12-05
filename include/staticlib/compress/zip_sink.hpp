@@ -279,7 +279,7 @@ public:
             size_t count_before = entry_deflater->get_count();
             entry_deflater->write(span);
             size_t count = entry_deflater->get_count() - count_before;
-            this->entry_crc = ::crc32(entry_crc, reinterpret_cast<const Bytef*>(span.data()), count);
+            this->entry_crc = ::crc32(entry_crc, reinterpret_cast<const Bytef*>(span.data()), static_cast<uInt>(count));
             return static_cast<std::streamsize>(count);
         } else {
             throw compress_exception(TRACEMSG("Invalid ZIP sink state: add ZIP entry before writing the data"));
