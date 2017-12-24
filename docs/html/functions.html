@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">staticlib_compress
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
   </td>
  </tr>
@@ -74,15 +74,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
+      <li><a href="#index_a"><span>a</span></a></li>
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_d"><span>d</span></a></li>
       <li><a href="#index_f"><span>f</span></a></li>
       <li><a href="#index_g"><span>g</span></a></li>
+      <li><a href="#index_h"><span>h</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_l"><span>l</span></a></li>
       <li><a href="#index_o"><span>o</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_w"><span>w</span></a></li>
+      <li><a href="#index_z"><span>z</span></a></li>
+      <li><a href="#index_0x7e"><span>~</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -91,7 +95,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -103,9 +107,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
 
+<h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
+<li>add_entry()
+: <a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html#a6fa3cb668a97c510343d78539960d81b">staticlib::compress::zip_sink&lt; Sink &gt;</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
-<li>CompressException()
-: <a class="el" href="classstaticlib_1_1compress_1_1CompressException.html#ab6f66058d7f4ce6296d1fc84cfeff93a">staticlib::compress::CompressException</a>
+<li>compress_exception()
+: <a class="el" href="classstaticlib_1_1compress_1_1compress__exception.html#a45c8bce5c61c580bfbe4cc7af94854ab">staticlib::compress::compress_exception</a>
 </li>
 </ul>
 
@@ -114,24 +125,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>deflate_sink()
 : <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#ab72cc778c23290c191e5a7dbb6af40d9">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
 </li>
-<li>DeflateDeleter()
-: <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1DeflateDeleter.html#aa3b703f31bb10d4d80784a45299212f4">staticlib::compress::detail::DeflateDeleter&lt; Sink &gt;</a>
-</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_f"></a>- f -</h3><ul>
+<li>finalize()
+: <a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html#adefcbc44dbd06699dccfd132d434382c">staticlib::compress::zip_sink&lt; Sink &gt;</a>
+</li>
 <li>flush()
-: <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#af275839abaa826a02cb2875c7065c3ce">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
+: <a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html#ac25d9cc14c7703a57e6fd97a94f5e468">staticlib::compress::zip_sink&lt; Sink &gt;</a>
 , <a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html#ad2c3072e8d6fa23b1f55a4123103785d">staticlib::compress::lzma_sink&lt; Sink, compression_level, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#af275839abaa826a02cb2875c7065c3ce">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_g"></a>- g -</h3><ul>
+<li>get_sink()
+: <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#a787936f54f5f1806d08e9c36f33880ef">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html#a20d4947ce09005e607423ec66e3c1eb5">staticlib::compress::lzma_sink&lt; Sink, compression_level, buf_size &gt;</a>
+</li>
 <li>get_source()
 : <a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html#a5e440021ae79930b072c3a3ee7cde57f">staticlib::compress::inflate_source&lt; Source, buf_size &gt;</a>
 , <a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html#af1fda27e7bc4713cab28aac0930441de">staticlib::compress::lzma_source&lt; Source, buf_size &gt;</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_h"></a>- h -</h3><ul>
+<li>Header()
+: <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1Header.html#aa676866e402942a6f3243172876fc4c7">staticlib::compress::detail::Header</a>
 </li>
 </ul>
 
@@ -150,49 +173,63 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>lzma_source()
 : <a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html#ac31c107818ba17b6cc351f8349cd7c31">staticlib::compress::lzma_source&lt; Source, buf_size &gt;</a>
 </li>
-<li>LzmaDeleter()
-: <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1LzmaDeleter.html#af9507097fc9a1d4e5525e4c2dbbd4736">staticlib::compress::detail::LzmaDeleter&lt; Sink &gt;</a>
-</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_o"></a>- o -</h3><ul>
-<li>operator()()
-: <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1DeflateDeleter.html#ab07352decb656fa534010303596807d2">staticlib::compress::detail::DeflateDeleter&lt; Sink &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1InflateDeleter.html#a0c1a0248487c2705415a1f7c58c81c72">staticlib::compress::detail::InflateDeleter</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1LzmaDeleter.html#a0800f77e2688416c0ea52a22908a6dd6">staticlib::compress::detail::LzmaDeleter&lt; Sink &gt;</a>
-</li>
 <li>operator=()
-: <a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html#a080b4486d6ae6340f659acf5f324c897">staticlib::compress::lzma_sink&lt; Sink, compression_level, buf_size &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1LzmaDeleter.html#a5f44bbdbcb5038eb7e4054b697577b05">staticlib::compress::detail::LzmaDeleter&lt; Sink &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html#a56fac76187720b2a78364ce2afa5cf28">staticlib::compress::inflate_source&lt; Source, buf_size &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#a9353579e5fc2ecc9703e78d64284be4b">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1DeflateDeleter.html#acec1170bef141a963d5fca6c4711abaa">staticlib::compress::detail::DeflateDeleter&lt; Sink &gt;</a>
+: <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#adfecf20df291b38a3eed0a57aaa0fdc2">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html#a1b7edd3a97320d209d3459f6b6c1d6bf">staticlib::compress::zip_sink&lt; Sink &gt;</a>
 , <a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html#a690ee2787bea80c1c6c50a21e919ffab">staticlib::compress::lzma_source&lt; Source, buf_size &gt;</a>
 , <a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html#a89bfb086c786f896d825e5aa9b0bbb0b">staticlib::compress::lzma_sink&lt; Sink, compression_level, buf_size &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html#a9be23fabd20bd49975d036ef3faf2d59">staticlib::compress::lzma_source&lt; Source, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html#a56fac76187720b2a78364ce2afa5cf28">staticlib::compress::inflate_source&lt; Source, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#a9353579e5fc2ecc9703e78d64284be4b">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
 <li>read()
-: <a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html#ae7337950e17b5ca2a4ed805c80c6494f">staticlib::compress::inflate_source&lt; Source, buf_size &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html#a5505b0c1ed70bfb18ff7a1de8229611a">staticlib::compress::lzma_source&lt; Source, buf_size &gt;</a>
+: <a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html#ad2b61157ff421df50bfc5387548bce74">staticlib::compress::inflate_source&lt; Source, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html#a1ad0578f330660b3cfa1902b1f3a9df8">staticlib::compress::lzma_source&lt; Source, buf_size &gt;</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_w"></a>- w -</h3><ul>
 <li>write()
-: <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#a8c44e83233f75c42f0a0224f47eb2c0d">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
-, <a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html#ad9f085f7c698d67d7c11cbf6a48e82cf">staticlib::compress::lzma_sink&lt; Sink, compression_level, buf_size &gt;</a>
+: <a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html#ab2abf50f9fd5e540f328c9dfaa86b834">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html#a61e83f56d884e2b69da8e13f01abac1c">staticlib::compress::lzma_sink&lt; Sink, compression_level, buf_size &gt;</a>
+, <a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html#a4a01813da9a4228e9b5d03eedebfc20c">staticlib::compress::zip_sink&lt; Sink &gt;</a>
+</li>
+<li>write_cd_file_header()
+: <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1Header.html#a9f9d37eec6ed7d2a55dda62db0ecda77">staticlib::compress::detail::Header</a>
+</li>
+<li>write_data_descriptor()
+: <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1Header.html#adf98e1712ec003d082f42b09b95720fa">staticlib::compress::detail::Header</a>
+</li>
+<li>write_local_file_header()
+: <a class="el" href="classstaticlib_1_1compress_1_1detail_1_1Header.html#a7592083445539ae922d1e9b984fa6a5f">staticlib::compress::detail::Header</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_z"></a>- z -</h3><ul>
+<li>zip_sink()
+: <a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html#a96dc6fbbaf100440131abadbe332538f">staticlib::compress::zip_sink&lt; Sink &gt;</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_0x7e"></a>- ~ -</h3><ul>
+<li>~zip_sink()
+: <a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html#a225cd72fe72446c44d8a3e2cfbcc6df3">staticlib::compress::zip_sink&lt; Sink &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 6 2016 16:33:36 for staticlib_compress by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 24 2017 18:42:15 for staticlib_compress by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

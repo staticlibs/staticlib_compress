@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">staticlib_compress
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -92,19 +92,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">deflate_sink.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;ios&gt;</code><br/>
+<div class="textblock"><code>#include &lt;cstdlib&gt;</code><br/>
+<code>#include &lt;cstring&gt;</code><br/>
+<code>#include &lt;ios&gt;</code><br/>
 <code>#include &lt;memory&gt;</code><br/>
 <code>#include &lt;type_traits&gt;</code><br/>
 <code>#include &quot;zlib.h&quot;</code><br/>
 <code>#include &quot;staticlib/config.hpp&quot;</code><br/>
 <code>#include &quot;staticlib/io.hpp&quot;</code><br/>
-<code>#include &quot;<a class="el" href="CompressException_8hpp_source.html">staticlib/compress/CompressException.hpp</a>&quot;</code><br/>
+<code>#include &quot;staticlib/support.hpp&quot;</code><br/>
+<code>#include &quot;<a class="el" href="compress__exception_8hpp_source.html">staticlib/compress/compress_exception.hpp</a>&quot;</code><br/>
 </div>
 <p><a href="deflate__sink_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1detail_1_1DeflateDeleter.html">staticlib::compress::detail::DeflateDeleter&lt; Sink &gt;</a></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html">staticlib::compress::deflate_sink&lt; Sink, compression_level, buf_size &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sink wrapper that compressed written data using Deflate algorithm.  <a href="classstaticlib_1_1compress_1_1deflate__sink.html#details">More...</a><br/></td></tr>
 </table><table class="memberdecls">
@@ -112,23 +114,21 @@ Classes</h2></td></tr>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacestaticlib"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestaticlib.html">staticlib</a></td></tr>
 <tr class="memitem:namespacestaticlib_1_1compress"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html">staticlib::compress</a></td></tr>
-<tr class="memitem:namespacestaticlib_1_1compress_1_1detail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress_1_1detail.html">staticlib::compress::detail</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a63933c16dc60842b23c6267abe613d9b"><td class="memTemplParams" colspan="2">template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_reference&lt;Sink&gt;::value&gt;::type&gt; </td></tr>
 <tr class="memitem:a63933c16dc60842b23c6267abe613d9b"><td class="memTemplItemLeft" align="right" valign="top">deflate_sink&lt; Sink &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a63933c16dc60842b23c6267abe613d9b">staticlib::compress::make_deflate_sink</a> (Sink &amp;&amp;sink)</td></tr>
 <tr class="memdesc:a63933c16dc60842b23c6267abe613d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will own the specified sink.  <a href="#a63933c16dc60842b23c6267abe613d9b"></a><br/></td></tr>
-<tr class="memitem:a3b4751356c28e2e75cb4d672811752e9"><td class="memTemplParams" colspan="2">template&lt;typename Sink &gt; </td></tr>
-<tr class="memitem:a3b4751356c28e2e75cb4d672811752e9"><td class="memTemplItemLeft" align="right" valign="top">deflate_sink<br class="typebreak"/>
-&lt; staticlib::io::reference_sink<br class="typebreak"/>
-&lt; Sink &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a3b4751356c28e2e75cb4d672811752e9">staticlib::compress::make_deflate_sink</a> (Sink &amp;sink)</td></tr>
-<tr class="memdesc:a3b4751356c28e2e75cb4d672811752e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will NOT own the specified sink.  <a href="#a3b4751356c28e2e75cb4d672811752e9"></a><br/></td></tr>
+<tr class="memitem:a8c012c84202eeb797564b11ab696dc4d"><td class="memTemplParams" colspan="2">template&lt;typename Sink &gt; </td></tr>
+<tr class="memitem:a8c012c84202eeb797564b11ab696dc4d"><td class="memTemplItemLeft" align="right" valign="top">deflate_sink<br class="typebreak"/>
+&lt; sl::io::reference_sink&lt; Sink &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a8c012c84202eeb797564b11ab696dc4d">staticlib::compress::make_deflate_sink</a> (Sink &amp;sink)</td></tr>
+<tr class="memdesc:a8c012c84202eeb797564b11ab696dc4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will NOT own the specified sink.  <a href="#a8c012c84202eeb797564b11ab696dc4d"></a><br/></td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 6 2016 16:33:36 for staticlib_compress by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 24 2017 18:42:15 for staticlib_compress by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>

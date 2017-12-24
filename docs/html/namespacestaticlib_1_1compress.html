@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">staticlib_compress
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
   </td>
  </tr>
@@ -70,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">staticlib::compress Namespace Reference</div>  </div>
@@ -100,8 +101,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1CompressException.html">CompressException</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception that is thrown on compression/decompression error.  <a href="classstaticlib_1_1compress_1_1CompressException.html#details">More...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1compress__exception.html">compress_exception</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception that is thrown on compression/decompression error.  <a href="classstaticlib_1_1compress_1_1compress__exception.html#details">More...</a><br/></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html">deflate_sink</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sink wrapper that compressed written data using Deflate algorithm.  <a href="classstaticlib_1_1compress_1_1deflate__sink.html#details">More...</a><br/></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html">inflate_source</a></td></tr>
@@ -110,42 +111,66 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sink wrapper that compressed written data using LZMA algorithm.  <a href="classstaticlib_1_1compress_1_1lzma__sink.html#details">More...</a><br/></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html">lzma_source</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Source wrapper that decompresses deflated data.  <a href="classstaticlib_1_1compress_1_1lzma__source.html#details">More...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html">zip_sink</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sink wrapper that creates ZIP archives, CRC sum and compression of entries is NOT supported.  <a href="classstaticlib_1_1compress_1_1zip__sink.html#details">More...</a><br/></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ab24229a25536a0cdf33126701557a143"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#ab24229a25536a0cdf33126701557a143">zip_compression_method</a> </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a63933c16dc60842b23c6267abe613d9b"><td class="memTemplParams" colspan="2">template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_reference&lt;Sink&gt;::value&gt;::type&gt; </td></tr>
 <tr class="memitem:a63933c16dc60842b23c6267abe613d9b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html">deflate_sink</a>&lt; Sink &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a63933c16dc60842b23c6267abe613d9b">make_deflate_sink</a> (Sink &amp;&amp;sink)</td></tr>
 <tr class="memdesc:a63933c16dc60842b23c6267abe613d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will own the specified sink.  <a href="#a63933c16dc60842b23c6267abe613d9b"></a><br/></td></tr>
-<tr class="memitem:a3b4751356c28e2e75cb4d672811752e9"><td class="memTemplParams" colspan="2">template&lt;typename Sink &gt; </td></tr>
-<tr class="memitem:a3b4751356c28e2e75cb4d672811752e9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html">deflate_sink</a><br class="typebreak"/>
-&lt; staticlib::io::reference_sink<br class="typebreak"/>
-&lt; Sink &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a3b4751356c28e2e75cb4d672811752e9">make_deflate_sink</a> (Sink &amp;sink)</td></tr>
-<tr class="memdesc:a3b4751356c28e2e75cb4d672811752e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will NOT own the specified sink.  <a href="#a3b4751356c28e2e75cb4d672811752e9"></a><br/></td></tr>
+<tr class="memitem:a8c012c84202eeb797564b11ab696dc4d"><td class="memTemplParams" colspan="2">template&lt;typename Sink &gt; </td></tr>
+<tr class="memitem:a8c012c84202eeb797564b11ab696dc4d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html">deflate_sink</a><br class="typebreak"/>
+&lt; sl::io::reference_sink&lt; Sink &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a8c012c84202eeb797564b11ab696dc4d">make_deflate_sink</a> (Sink &amp;sink)</td></tr>
+<tr class="memdesc:a8c012c84202eeb797564b11ab696dc4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will NOT own the specified sink.  <a href="#a8c012c84202eeb797564b11ab696dc4d"></a><br/></td></tr>
 <tr class="memitem:a4fb912eee368198b7aa2d942d155a082"><td class="memTemplParams" colspan="2">template&lt;typename Source , class  = typename std::enable_if&lt;!std::is_lvalue_reference&lt;Source&gt;::value&gt;::type&gt; </td></tr>
 <tr class="memitem:a4fb912eee368198b7aa2d942d155a082"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html">inflate_source</a>&lt; Source &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a4fb912eee368198b7aa2d942d155a082">make_inflate_source</a> (Source &amp;&amp;source)</td></tr>
 <tr class="memdesc:a4fb912eee368198b7aa2d942d155a082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating inflate sources, created object will own the specified source.  <a href="#a4fb912eee368198b7aa2d942d155a082"></a><br/></td></tr>
-<tr class="memitem:a73075e9190cabda996855c0af4ffda11"><td class="memTemplParams" colspan="2">template&lt;typename Source &gt; </td></tr>
-<tr class="memitem:a73075e9190cabda996855c0af4ffda11"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html">inflate_source</a><br class="typebreak"/>
-&lt; staticlib::io::reference_source<br class="typebreak"/>
-&lt; Source &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a73075e9190cabda996855c0af4ffda11">make_inflate_source</a> (Source &amp;source)</td></tr>
-<tr class="memdesc:a73075e9190cabda996855c0af4ffda11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating inflate sources, created object will NOT own the specified source.  <a href="#a73075e9190cabda996855c0af4ffda11"></a><br/></td></tr>
+<tr class="memitem:a2ecd78d6a52acab599d52ed75b0a9774"><td class="memTemplParams" colspan="2">template&lt;typename Source &gt; </td></tr>
+<tr class="memitem:a2ecd78d6a52acab599d52ed75b0a9774"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html">inflate_source</a><br class="typebreak"/>
+&lt; sl::io::reference_source<br class="typebreak"/>
+&lt; Source &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a2ecd78d6a52acab599d52ed75b0a9774">make_inflate_source</a> (Source &amp;source)</td></tr>
+<tr class="memdesc:a2ecd78d6a52acab599d52ed75b0a9774"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating inflate sources, created object will NOT own the specified source.  <a href="#a2ecd78d6a52acab599d52ed75b0a9774"></a><br/></td></tr>
 <tr class="memitem:a0caa633139c3409483d5bf40c7fe9943"><td class="memTemplParams" colspan="2">template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_reference&lt;Sink&gt;::value&gt;::type&gt; </td></tr>
 <tr class="memitem:a0caa633139c3409483d5bf40c7fe9943"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html">lzma_sink</a>&lt; Sink &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a0caa633139c3409483d5bf40c7fe9943">make_lzma_sink</a> (Sink &amp;&amp;sink)</td></tr>
-<tr class="memdesc:a0caa633139c3409483d5bf40c7fe9943"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will own the specified sink.  <a href="#a0caa633139c3409483d5bf40c7fe9943"></a><br/></td></tr>
-<tr class="memitem:a59cbdb1e6ae6fa86df49ad67c278602e"><td class="memTemplParams" colspan="2">template&lt;typename Sink &gt; </td></tr>
-<tr class="memitem:a59cbdb1e6ae6fa86df49ad67c278602e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html">lzma_sink</a><br class="typebreak"/>
-&lt; staticlib::io::reference_sink<br class="typebreak"/>
-&lt; Sink &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a59cbdb1e6ae6fa86df49ad67c278602e">make_lzma_sink</a> (Sink &amp;sink)</td></tr>
-<tr class="memdesc:a59cbdb1e6ae6fa86df49ad67c278602e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating deflate sinks, created object will NOT own the specified sink.  <a href="#a59cbdb1e6ae6fa86df49ad67c278602e"></a><br/></td></tr>
+<tr class="memdesc:a0caa633139c3409483d5bf40c7fe9943"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating lzma sinks, created object will own the specified sink.  <a href="#a0caa633139c3409483d5bf40c7fe9943"></a><br/></td></tr>
+<tr class="memitem:a3a4c8f2606785eb797dc5cfc142163a4"><td class="memTemplParams" colspan="2">template&lt;typename Sink &gt; </td></tr>
+<tr class="memitem:a3a4c8f2606785eb797dc5cfc142163a4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html">lzma_sink</a><br class="typebreak"/>
+&lt; sl::io::reference_sink&lt; Sink &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a3a4c8f2606785eb797dc5cfc142163a4">make_lzma_sink</a> (Sink &amp;sink)</td></tr>
+<tr class="memdesc:a3a4c8f2606785eb797dc5cfc142163a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating lzma sinks, created object will NOT own the specified sink.  <a href="#a3a4c8f2606785eb797dc5cfc142163a4"></a><br/></td></tr>
 <tr class="memitem:a3f730831b4fcabb17dd78c565147c496"><td class="memTemplParams" colspan="2">template&lt;typename Source , class  = typename std::enable_if&lt;!std::is_lvalue_reference&lt;Source&gt;::value&gt;::type&gt; </td></tr>
 <tr class="memitem:a3f730831b4fcabb17dd78c565147c496"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html">lzma_source</a>&lt; Source &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a3f730831b4fcabb17dd78c565147c496">make_lzma_source</a> (Source &amp;&amp;source)</td></tr>
-<tr class="memdesc:a3f730831b4fcabb17dd78c565147c496"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating inflate sources, created object will own the specified source.  <a href="#a3f730831b4fcabb17dd78c565147c496"></a><br/></td></tr>
-<tr class="memitem:a161f20018fe8cf6ff08476464fdaf088"><td class="memTemplParams" colspan="2">template&lt;typename Source &gt; </td></tr>
-<tr class="memitem:a161f20018fe8cf6ff08476464fdaf088"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html">lzma_source</a><br class="typebreak"/>
-&lt; staticlib::io::reference_source<br class="typebreak"/>
-&lt; Source &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a161f20018fe8cf6ff08476464fdaf088">make_lzma_source</a> (Source &amp;source)</td></tr>
-<tr class="memdesc:a161f20018fe8cf6ff08476464fdaf088"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating inflate sources, created object will NOT own the specified source.  <a href="#a161f20018fe8cf6ff08476464fdaf088"></a><br/></td></tr>
+<tr class="memdesc:a3f730831b4fcabb17dd78c565147c496"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating lzma sources, created object will own the specified source.  <a href="#a3f730831b4fcabb17dd78c565147c496"></a><br/></td></tr>
+<tr class="memitem:aef8cd1bcf6be2d02b52eea48cc42126a"><td class="memTemplParams" colspan="2">template&lt;typename Source &gt; </td></tr>
+<tr class="memitem:aef8cd1bcf6be2d02b52eea48cc42126a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html">lzma_source</a><br class="typebreak"/>
+&lt; sl::io::reference_source<br class="typebreak"/>
+&lt; Source &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#aef8cd1bcf6be2d02b52eea48cc42126a">make_lzma_source</a> (Source &amp;source)</td></tr>
+<tr class="memdesc:aef8cd1bcf6be2d02b52eea48cc42126a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating lzma sources, created object will NOT own the specified source.  <a href="#aef8cd1bcf6be2d02b52eea48cc42126a"></a><br/></td></tr>
+<tr class="memitem:a1c72a1be1c543ed5667c92d4e5b4ec23"><td class="memTemplParams" colspan="2">template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_reference&lt;Sink&gt;::value&gt;::type&gt; </td></tr>
+<tr class="memitem:a1c72a1be1c543ed5667c92d4e5b4ec23"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html">zip_sink</a>&lt; Sink &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a1c72a1be1c543ed5667c92d4e5b4ec23">make_zip_sink</a> (Sink &amp;&amp;sink)</td></tr>
+<tr class="memdesc:a1c72a1be1c543ed5667c92d4e5b4ec23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating zip sinks, created object will own the specified sink.  <a href="#a1c72a1be1c543ed5667c92d4e5b4ec23"></a><br/></td></tr>
+<tr class="memitem:a9cbc64e3ca72400817edaf6d52c3e723"><td class="memTemplParams" colspan="2">template&lt;typename Sink &gt; </td></tr>
+<tr class="memitem:a9cbc64e3ca72400817edaf6d52c3e723"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html">zip_sink</a><br class="typebreak"/>
+&lt; sl::io::reference_sink&lt; Sink &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestaticlib_1_1compress.html#a9cbc64e3ca72400817edaf6d52c3e723">make_zip_sink</a> (Sink &amp;sink)</td></tr>
+<tr class="memdesc:a9cbc64e3ca72400817edaf6d52c3e723"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function for creating zip sinks, created object will NOT own the specified sink.  <a href="#a9cbc64e3ca72400817edaf6d52c3e723"></a><br/></td></tr>
 </table>
+<h2>Enumeration Type Documentation</h2>
+<a class="anchor" id="ab24229a25536a0cdf33126701557a143"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacestaticlib_1_1compress.html#ab24229a25536a0cdf33126701557a143">staticlib::compress::zip_compression_method</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2>Function Documentation</h2>
 <a class="anchor" id="a63933c16dc60842b23c6267abe613d9b"></a>
 <div class="memitem">
@@ -174,14 +199,14 @@ template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_
 
 </div>
 </div>
-<a class="anchor" id="a3b4751356c28e2e75cb4d672811752e9"></a>
+<a class="anchor" id="a8c012c84202eeb797564b11ab696dc4d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Sink &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html">deflate_sink</a>&lt;staticlib::io::reference_sink&lt;Sink&gt; &gt; staticlib::compress::make_deflate_sink </td>
+          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1deflate__sink.html">deflate_sink</a>&lt;sl::io::reference_sink&lt;Sink&gt; &gt; staticlib::compress::make_deflate_sink </td>
           <td>(</td>
           <td class="paramtype">Sink &amp;&#160;</td>
           <td class="paramname"><em>sink</em></td><td>)</td>
@@ -228,14 +253,14 @@ template&lt;typename Source , class  = typename std::enable_if&lt;!std::is_lvalu
 
 </div>
 </div>
-<a class="anchor" id="a73075e9190cabda996855c0af4ffda11"></a>
+<a class="anchor" id="a2ecd78d6a52acab599d52ed75b0a9774"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Source &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html">inflate_source</a>&lt;staticlib::io::reference_source&lt;Source&gt; &gt; staticlib::compress::make_inflate_source </td>
+          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1inflate__source.html">inflate_source</a>&lt;sl::io::reference_source&lt;Source&gt; &gt; staticlib::compress::make_inflate_source </td>
           <td>(</td>
           <td class="paramtype">Source &amp;&#160;</td>
           <td class="paramname"><em>source</em></td><td>)</td>
@@ -271,7 +296,7 @@ template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_
       </table>
 </div><div class="memdoc">
 
-<p>Factory function for creating deflate sinks, created object will own the specified sink. </p>
+<p>Factory function for creating lzma sinks, created object will own the specified sink. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sink</td><td>output sink </td></tr>
@@ -282,14 +307,14 @@ template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_
 
 </div>
 </div>
-<a class="anchor" id="a59cbdb1e6ae6fa86df49ad67c278602e"></a>
+<a class="anchor" id="a3a4c8f2606785eb797dc5cfc142163a4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Sink &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html">lzma_sink</a>&lt;staticlib::io::reference_sink&lt;Sink&gt; &gt; staticlib::compress::make_lzma_sink </td>
+          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1lzma__sink.html">lzma_sink</a>&lt;sl::io::reference_sink&lt;Sink&gt; &gt; staticlib::compress::make_lzma_sink </td>
           <td>(</td>
           <td class="paramtype">Sink &amp;&#160;</td>
           <td class="paramname"><em>sink</em></td><td>)</td>
@@ -298,7 +323,7 @@ template&lt;typename Sink &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Factory function for creating deflate sinks, created object will NOT own the specified sink. </p>
+<p>Factory function for creating lzma sinks, created object will NOT own the specified sink. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sink</td><td>output sink </td></tr>
@@ -325,7 +350,7 @@ template&lt;typename Source , class  = typename std::enable_if&lt;!std::is_lvalu
       </table>
 </div><div class="memdoc">
 
-<p>Factory function for creating inflate sources, created object will own the specified source. </p>
+<p>Factory function for creating lzma sources, created object will own the specified source. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">source</td><td>input source </td></tr>
@@ -336,14 +361,14 @@ template&lt;typename Source , class  = typename std::enable_if&lt;!std::is_lvalu
 
 </div>
 </div>
-<a class="anchor" id="a161f20018fe8cf6ff08476464fdaf088"></a>
+<a class="anchor" id="aef8cd1bcf6be2d02b52eea48cc42126a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Source &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html">lzma_source</a>&lt;staticlib::io::reference_source&lt;Source&gt; &gt; staticlib::compress::make_lzma_source </td>
+          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1lzma__source.html">lzma_source</a>&lt;sl::io::reference_source&lt;Source&gt; &gt; staticlib::compress::make_lzma_source </td>
           <td>(</td>
           <td class="paramtype">Source &amp;&#160;</td>
           <td class="paramname"><em>source</em></td><td>)</td>
@@ -352,7 +377,7 @@ template&lt;typename Source &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Factory function for creating inflate sources, created object will NOT own the specified source. </p>
+<p>Factory function for creating lzma sources, created object will NOT own the specified source. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">source</td><td>input source </td></tr>
@@ -363,10 +388,64 @@ template&lt;typename Source &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a1c72a1be1c543ed5667c92d4e5b4ec23"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Sink , class  = typename std::enable_if&lt;!std::is_lvalue_reference&lt;Sink&gt;::value&gt;::type&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html">zip_sink</a>&lt;Sink&gt; staticlib::compress::make_zip_sink </td>
+          <td>(</td>
+          <td class="paramtype">Sink &amp;&amp;&#160;</td>
+          <td class="paramname"><em>sink</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Factory function for creating zip sinks, created object will own the specified sink. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sink</td><td>output sink </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>zip sink </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a9cbc64e3ca72400817edaf6d52c3e723"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Sink &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstaticlib_1_1compress_1_1zip__sink.html">zip_sink</a>&lt;sl::io::reference_sink&lt;Sink&gt; &gt; staticlib::compress::make_zip_sink </td>
+          <td>(</td>
+          <td class="paramtype">Sink &amp;&#160;</td>
+          <td class="paramname"><em>sink</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Factory function for creating zip sinks, created object will NOT own the specified sink. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sink</td><td>output sink </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>zip sink </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Feb 6 2016 16:33:36 for staticlib_compress by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Dec 24 2017 18:42:15 for staticlib_compress by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.2
 </small></address>
