@@ -82,15 +82,14 @@ public:
     lzma_source(Source src) :
     src(std::move(src)),
     strm([] {
-        lzma_stream* strm = static_cast<lzma_stream*> (std::malloc(sizeof(lzma_stream)));
-        if (nullptr == strm) throw compress_exception(TRACEMSG(
+        lzma_stream* stream = static_cast<lzma_stream*> (std::malloc(sizeof(lzma_stream)));
+        if (nullptr == stream) throw compress_exception(TRACEMSG(
                 "Error creating lzma stream: 'malloc' failed"));
-        *strm = LZMA_STREAM_INIT;
-        auto err = lzma_stream_decoder(strm, UINT64_MAX, 0);
+        *stream = LZMA_STREAM_INIT;
+        auto err = lzma_stream_decoder(stream, UINT64_MAX, 0);
         if (LZMA_OK != err) throw compress_exception(TRACEMSG(
                 "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
-        return strm;
-        
+        return stream;
     }()) { }
 
     ~lzma_source() STATICLIB_NOEXCEPT {

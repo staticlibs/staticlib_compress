@@ -1,11 +1,16 @@
 Staticlibs Compress library
 ===========================
 
+[![travis](https://travis-ci.org/staticlibs/staticlib_compress.svg?branch=master)](https://travis-ci.org/staticlibs/staticlib_compress)
+[![appveyor](https://ci.appveyor.com/api/projects/status/github/staticlibs/staticlib_compress?svg=true)](https://ci.appveyor.com/project/staticlibs/staticlib-compress)
+
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
 This project provides implementation of `Source` (input stream) and `Sink` (output stream)
 that performs compression/decompress using [Zlib](http://www.zlib.net/) and [Xz](http://tukaani.org/xz/)
 compression algorithms.
+
+It additionally provides `zip_sink` that allows to write ZIP files. [staticlib_unzip](https://github.com/staticlibs/staticlib_unzip) library can be used to read ZIP files.
 
 This library is header-only and depends on [staticlib_io](https://github.com/staticlibs/staticlib_io.git),
 [staticlib_config](https://github.com/staticlibs/staticlib_config.git),
@@ -20,6 +25,12 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2017-12-24**
+
+ * version 1.2.0
+ * `zip_sink` implementation
+ * vs2017 support
 
 **2017-05-29**
 

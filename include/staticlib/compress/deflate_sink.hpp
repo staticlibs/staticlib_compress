@@ -69,14 +69,14 @@ public:
     deflate_sink(Sink&& sink) :
     sink(std::move(sink)),
     strm([] {
-        z_stream* strm = static_cast<z_stream*> (std::malloc(sizeof(z_stream)));
-        if (nullptr == strm) throw compress_exception(TRACEMSG(
+        z_stream* stream = static_cast<z_stream*> (std::malloc(sizeof(z_stream)));
+        if (nullptr == stream) throw compress_exception(TRACEMSG(
                 "Error creating deflate stream: 'malloc' failed"));
-        std::memset(strm, 0, sizeof (z_stream));
-        auto err = deflateInit2(strm, compression_level, Z_DEFLATED, -MAX_WBITS, 8, Z_DEFAULT_STRATEGY);
+        std::memset(stream, 0, sizeof (z_stream));
+        auto err = deflateInit2(stream, compression_level, Z_DEFLATED, -MAX_WBITS, 8, Z_DEFAULT_STRATEGY);
         if (Z_OK != err) throw compress_exception(TRACEMSG(
                 "Error initializing deflate stream: [" + ::zError(err) + "]"));
-        return strm;
+        return stream;
     }()) { }
 
     ~deflate_sink() STATICLIB_NOEXCEPT {

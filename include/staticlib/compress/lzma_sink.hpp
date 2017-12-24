@@ -70,14 +70,14 @@ public:
     lzma_sink(Sink&& sink) :
     sink(std::move(sink)),
     strm([] {
-        lzma_stream* strm = static_cast<lzma_stream*> (std::malloc(sizeof(lzma_stream)));
-        if (nullptr == strm) throw compress_exception(TRACEMSG(
+        lzma_stream* stream = static_cast<lzma_stream*> (std::malloc(sizeof(lzma_stream)));
+        if (nullptr == stream) throw compress_exception(TRACEMSG(
                 "Error creating lzma stream: 'malloc' failed"));
-        *strm = LZMA_STREAM_INIT;
-        auto err = ::lzma_easy_encoder(strm, compression_level, LZMA_CHECK_CRC64);
+        *stream = LZMA_STREAM_INIT;
+        auto err = ::lzma_easy_encoder(stream, compression_level, LZMA_CHECK_CRC64);
         if (LZMA_OK != err) throw compress_exception(TRACEMSG(
                 "Error initializing LZMA stream, code: [" + sl::support::to_string(err) + "]"));
-        return strm;
+        return stream;
     }()) { }
 
     ~lzma_sink() STATICLIB_NOEXCEPT {

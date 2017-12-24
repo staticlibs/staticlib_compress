@@ -80,14 +80,14 @@ public:
     inflate_source(Source src) :
     src(std::move(src)),
     strm([]{
-        z_stream* strm = static_cast<z_stream*> (std::malloc(sizeof(z_stream)));
-        if (nullptr == strm) throw compress_exception(TRACEMSG(
+        z_stream* stream = static_cast<z_stream*> (std::malloc(sizeof(z_stream)));
+        if (nullptr == stream) throw compress_exception(TRACEMSG(
                 "Error creating inflate stream: 'malloc' failed"));
-        std::memset(strm, 0, sizeof (z_stream));
-        auto err = inflateInit2(strm, -MAX_WBITS);
+        std::memset(stream, 0, sizeof (z_stream));
+        auto err = inflateInit2(stream, -MAX_WBITS);
         if (Z_OK != err) throw compress_exception(TRACEMSG(
                 "Error initializing inflate stream: [" + ::zError(err) + "]"));
-        return strm;
+        return stream;
     }()) { }
 
     ~inflate_source() STATICLIB_NOEXCEPT {
