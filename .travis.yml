@@ -55,15 +55,18 @@ install:
         zlib-devel
         xz-devel ;
 
+    `# Android` ;
+    git clone https://github.com/staticlibs/android-ndk-r9d-arm-linux-androideabi-4.8.git ../android-ndk ;
+
     fi
 
 before_script:
   - cd ..
   - git clone https://github.com/staticlibs/cmake.git
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    git clone --recursive https://github.com/staticlibs/external_zlib.git ;
-    git clone --recursive https://github.com/staticlibs/external_xz.git ;
-    fi
+# mac and android
+  - git clone --recursive https://github.com/staticlibs/external_zlib.git
+  - git clone --recursive https://github.com/staticlibs/external_xz.git
+# all platforms
   - git clone https://github.com/staticlibs/staticlib_config.git
   - git clone https://github.com/staticlibs/staticlib_support.git
   - git clone https://github.com/staticlibs/staticlib_io.git
@@ -101,6 +104,13 @@ script:
     $D mkdir /test ;
     $D cp -r /src/staticlib_compress/test/data /test/ ;
     $D make all test ;
+
+    `# Android` ;
+    cd .. ;
+    mkdir build-android ;
+    cd build-android ;
+    cmake ../staticlib_compress/test -DCMAKE_BUILD_TYPE=Release -DSTATICLIB_TOOLCHAIN=android_armeabi_gcc -DANDROID_TOOLCHAIN_DIR=`pwd`/../android-ndk ;
+    make ;
 
     fi
 
