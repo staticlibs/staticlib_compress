@@ -97,13 +97,17 @@ public:
             auto err = ::lzma_code(strm, LZMA_FINISH);
             switch (err) {
             case LZMA_OK:
-                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
-                strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
-                strm->avail_out = buf.size();
+                if (strm->avail_out < buf.size()) {
+                    sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                    strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
+                    strm->avail_out = buf.size();
+                }
                 // not finished
                 break;
             case LZMA_STREAM_END:
-                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                if (strm->avail_out < buf.size()) {
+                    sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                }
                 // finished
                 coding = false;
                 break;
@@ -172,9 +176,11 @@ public:
             auto err = ::lzma_code(strm, LZMA_RUN);
             switch (err) {
             case LZMA_OK:
-                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
-                strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
-                strm->avail_out = buf.size();
+                if (strm->avail_out < buf.size()) {
+                    sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                    strm->next_out = reinterpret_cast<uint8_t*>(buf.data());
+                    strm->avail_out = buf.size();
+                }
                 break;
             default: throw compress_exception(TRACEMSG(
                         "LZMA error code: [" + sl::support::to_string(err) + "]"));

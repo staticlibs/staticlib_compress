@@ -97,13 +97,17 @@ public:
             // cannot report any error safely - we are in destructor
             switch (err) {
             case Z_OK:
-                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
-                strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
-                strm->avail_out = static_cast<uInt> (buf.size());
+                if (strm->avail_out < buf.size()) {
+                    sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                    strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
+                    strm->avail_out = static_cast<uInt> (buf.size());
+                }
                 // still not finished
                 break;
             case Z_STREAM_END:
-                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                if (strm->avail_out < buf.size()) {
+                    sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                }
                 // finished
                 deflating = false;
                 break;
@@ -172,9 +176,11 @@ public:
             auto err = ::deflate(strm, Z_NO_FLUSH);
             switch (err) {
             case Z_OK:
-                sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
-                strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
-                strm->avail_out = static_cast<uInt> (buf.size());
+                if (strm->avail_out < buf.size()) {
+                    sl::io::write_all(sink, {buf.data(), buf.size() - strm->avail_out});
+                    strm->next_out = reinterpret_cast<unsigned char*> (buf.data());
+                    strm->avail_out = static_cast<uInt> (buf.size());
+                }
                 break;
             default: throw compress_exception(TRACEMSG(
                         "Deflate error: [" + ::zError(err) + "]"));
