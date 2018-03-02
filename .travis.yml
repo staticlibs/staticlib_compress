@@ -64,8 +64,10 @@ before_script:
   - cd ..
   - git clone https://github.com/staticlibs/cmake.git
 # mac and android
-  - git clone --recursive https://github.com/staticlibs/external_zlib.git
-  - git clone --recursive https://github.com/staticlibs/external_xz.git
+  - git clone https://github.com/staticlibs/external_zlib.git
+  - git clone https://github.com/staticlibs/lookaside_zlib.git
+  - git clone https://github.com/staticlibs/external_xz.git
+  - git clone https://github.com/staticlibs/lookaside_xz.git
 # all platforms
   - git clone https://github.com/staticlibs/staticlib_config.git
   - git clone https://github.com/staticlibs/staticlib_support.git
@@ -76,7 +78,8 @@ before_script:
   - mkdir test
   - cp -r staticlib_compress/test/data test/
   - git clone https://github.com/staticlibs/staticlib_utils.git
-  - git clone --recursive https://github.com/staticlibs/staticlib_tinydir.git
+  - git clone https://github.com/staticlibs/staticlib_tinydir.git
+  - git clone https://github.com/staticlibs/tinydir.git
 
 script:
   - mkdir build
