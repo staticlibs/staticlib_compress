@@ -26,6 +26,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2018-02-22**
+
+ * version 1.2.1
+ * check data avail before writing
+
 **2017-12-24**
 
  * version 1.2.0
