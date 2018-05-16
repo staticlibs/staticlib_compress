@@ -26,6 +26,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2018-05-16**
+
+ * version 1.2.2
+ * drop broken move constructor in `zip_sink`
+
 **2018-02-22**
 
  * version 1.2.1

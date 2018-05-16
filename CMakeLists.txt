@@ -15,7 +15,7 @@
 cmake_minimum_required ( VERSION 2.8.12 )
 
 project ( staticlib_compress CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 1.2.1 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 1.2.2 )
 set ( ${PROJECT_NAME}_DESCRIPTION "Staticlibs Compress library" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/staticlib_compress )
 include ( ${CMAKE_CURRENT_LIST_DIR}/resources/macros.cmake )

@@ -32,9 +32,9 @@
 
 void test_store() {
     auto sink = sl::compress::make_zip_sink(sl::tinydir::file_sink("test.zip"));
-    sink.add_entry("foo.txt");
+    sink.get_sink().add_entry("foo.txt");
     sink.write({"hello", 5});
-    sink.add_entry("bar/baz.txt");
+    sink.get_sink().add_entry("bar/baz.txt");
     sink.write({"bye", 3});
 }
 

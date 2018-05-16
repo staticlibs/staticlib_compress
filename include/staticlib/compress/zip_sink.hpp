@@ -240,35 +240,6 @@ public:
     zip_sink& operator=(const zip_sink&) = delete;
 
     /**
-     * Move constructor
-     * 
-     * @param other other instance
-     */
-    zip_sink(zip_sink&& other) :
-    sink(std::move(other.sink)),
-    headers(std::move(other.headers)),
-    cd_written(other.cd_written),
-    entry_counter(std::move(other.entry_counter)),
-    entry_deflater(std::move(other.entry_deflater)),
-    entry_crc(other.entry_crc) { }
-
-    /**
-     * Move assignment operator
-     * 
-     * @param other other instance
-     * @return this instance
-     */
-    zip_sink& operator=(zip_sink&& other) {
-        sink = std::move(other.sink);
-        headers = std::move(other.headers);
-        cd_written = other.cd_written;
-        entry_counter = std::move(other.entry_counter);
-        entry_deflater = std::move(other.entry_deflater);
-        entry_crc = other.entry_crc;
-        return *this;
-    }
-
-    /**
      * Write implementation
      * 
      * @param span source span
@@ -354,8 +325,9 @@ private:
  */
 template <typename Sink,
 class = typename std::enable_if<!std::is_lvalue_reference<Sink>::value>::type>
-zip_sink<Sink> make_zip_sink(Sink&& sink) {
-    return zip_sink<Sink>(std::move(sink));
+sl::io::unique_sink<zip_sink<Sink>> make_zip_sink(Sink&& sink) {
+    auto ptr = new zip_sink<Sink>(std::move(sink));
+    return sl::io::make_unique_sink(ptr);
 }
 
 /**
@@ -366,9 +338,10 @@ zip_sink<Sink> make_zip_sink(Sink&& sink) {
  * @return zip sink
  */
 template <typename Sink>
-zip_sink<sl::io::reference_sink<Sink>> make_zip_sink(Sink& sink) {
-    return zip_sink<sl::io::reference_sink<Sink>> (
+sl::io::unique_sink<zip_sink<sl::io::reference_sink<Sink>>> make_zip_sink(Sink& sink) {
+    auto ptr = new zip_sink<sl::io::reference_sink<Sink>> (
             sl::io::make_reference_sink(sink));
+    return sl::io::make_unique_sink(ptr);
 }
 
 } // namespace
